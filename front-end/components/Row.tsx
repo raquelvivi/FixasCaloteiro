@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, useColorScheme } from 'react-native';
 
 
-export default function Row({ label = '', valor = ''}) {
+export default function Row({ label = '', valor = ""}) {
  
       const theme = useColorScheme();
       const isDarkMode = theme === 'dark';

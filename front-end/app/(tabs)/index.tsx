@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, View, TextInput, Text, ScrollView, TouchableOpacity,
-  useColorScheme, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Modal,Platform
+  useColorScheme, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Modal, Platform
 } from 'react-native';
 
 
-import Row from '../../components/Row';
+
 import MaisInfor from '../../components/MaisInfor';
+import SelectPeople from '../../components/SelectPeople';
 
 export default function HomeScreen() {
 
@@ -14,6 +15,21 @@ export default function HomeScreen() {
   const isDarkMode = theme === 'dark';
 
   const [mostrarView, setMostrarView] = useState(false);
+
+  const [dados, setDados] = useState([]);
+
+  const [linha, setLinha] = useState([]);
+
+
+  useEffect(() => {
+    fetch('http://192.168.18.11:8080/api/fixa') // use o IP local da sua máquina
+      .then((res) => res.json())
+      .then((data) => setDados(data))
+      .catch((err) => console.log(err));
+  }, []);
+
+
+
 
   return (
 
@@ -29,13 +45,14 @@ export default function HomeScreen() {
           <View style={{
             flex: 1,
             backgroundColor: 'rgba(0,0,0,0.4)',
-            
+
+
           }}>
             <TouchableWithoutFeedback onPress={() => { }}>
               <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
               >
-                <MaisInfor />
+                <MaisInfor dado={linha} />
               </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
           </View>
@@ -70,42 +87,24 @@ export default function HomeScreen() {
 
           <View style={styles.fixa}>
 
-            {/*criar outro componente com o que ta logo a baixo da linha */}
-            <TouchableOpacity onPress={() => setMostrarView(true)} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
 
-              <Row label="Nome" valor="Larissa de Lavier" />
-              <Row label="Apelido" valor="Irmã de nega" />
-              <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="200" />
-                <Row label="Maximo" valor="150" />
-              </View>
-            </TouchableOpacity>
+            {dados.map((item, index) => {
+
+              return (
+
+                <View key={index}>
+                  <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
+
+                    <SelectPeople dado={item} />
+
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
 
 
-            <TouchableOpacity onPress={() => setMostrarView(true)} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
-              <Row label="Nome" valor="Larissa de Lavier" />
-              <Row label="Apelido" valor="Irmã de nega" />
-              <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="200" />
-                <Row label="Maximo" valor="150" />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setMostrarView(true)} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
-              <Row label="Nome" valor="Larissa de Lavier" />
-              <Row label="Apelido" valor="Irmã de nega" />
-              <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="200" />
-                <Row label="Maximo" valor="150" />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setMostrarView(true)} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
-              <Row label="Nome" valor="Vivian Raquel Batista Dantas" />
-              <Row label="Apelido" valor="Irmã de nega" />
-              <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="200" />
-                <Row label="Maximo" valor="150" />
-              </View>
-            </TouchableOpacity>
+
+
 
           </View>
 
@@ -126,7 +125,7 @@ export default function HomeScreen() {
       </ScrollView >
 
 
-    </View>
+    </View >
 
     // <TouchableWithoutFeedback
     //   onPress={() => {

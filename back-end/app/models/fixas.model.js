@@ -11,6 +11,7 @@ const Fixass = function (fixa) {
     this.datapaga = fixa.datapaga;
 };
 
+
 Fixass.create = (NewFixa, result) => {
     
     pool.query("INSERT INTO fixa (nome, apelido, logradouro, numero, bairro, creditomax, datapaga) VALUES ($1, $2, $3, $4, $5, $6, $7)", 
@@ -58,7 +59,7 @@ Fixass.getAll = (nome, result) => {
             result(null, err);
             return;
         }
-        console.log("fixa: ", res.rows);
+        // console.log("fixa: ", res.rows);
         result(null, res);
     });
 };

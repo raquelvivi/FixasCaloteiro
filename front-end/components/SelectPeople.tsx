@@ -1,29 +1,27 @@
 
-import React, { useState } from 'react';
-import { View, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import { View, StyleSheet, useColorScheme } from 'react-native';
 import Row from './Row';
 
 
 
-export default function MaisInfor({ dados = '' }) {
+export default function SelectPeople( { dado = {}} ) {
 
     const theme = useColorScheme();
     const isDarkMode = theme === 'dark';
-    const [mostrarView, setMostrarView] = useState(false);
+
 
     return (
 
-        <TouchableOpacity onPress={() => setMostrarView(true)} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
-            <Row label="Nome" valor="Vivi Dantas" />
-            <Row label="Apelido" valor="Irmã de nega" />
+        <View>
+            <Row label="Nome" valor={dado.nome} />
+            <Row label="Apelido" valor={String(dado.apelido)} />
             <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="200" />
-                <Row label="Maximo" valor="150" />
+                <Row label="Total" valor="50" />
+                <Row label="Maximo" valor={String(dado.creditomax)} />
             </View>
-        </TouchableOpacity>
 
-
-
+        </View>
     );
 }
 
@@ -40,6 +38,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 20,
         margin: 10,
-    
-      },
+
+    },
 });
