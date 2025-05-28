@@ -53,7 +53,7 @@ exports.findOne = (req, res) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: "(controllers) pesquisa nao encontrada com id ${ req.params.id }."
+                    message: `(controllers) pesquisa nao encontrada com id ${ req.params.id }.`
 });
 } else {
     res.status(500).send({

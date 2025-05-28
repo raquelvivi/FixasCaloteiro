@@ -13,45 +13,97 @@ const Fixass = function (fixa) {
 
 
 Fixass.create = (NewFixa, result) => {
-    
-    pool.query("INSERT INTO fixa (nome, apelido, logradouro, numero, bairro, creditomax, datapaga) VALUES ($1, $2, $3, $4, $5, $6, $7)", 
-        [NewFixa.nome, NewFixa.apelido, NewFixa.logradouro, NewFixa.numero,NewFixa.bairro, parseFloat(NewFixa.creditomax), parseInt( NewFixa.datapaga)], (err, res) => {
-        
-        if (err) {
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
-        console.log("created fixa: ", {
-            id: res.insertId, ...NewFixa
+
+    pool.query("INSERT INTO fixa (nome, apelido, logradouro, numero, bairro, creditomax, datapaga) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+        [NewFixa.nome, NewFixa.apelido, NewFixa.logradouro, NewFixa.numero, NewFixa.bairro, parseFloat(NewFixa.creditomax), parseInt(NewFixa.datapaga)], (err, res) => {
+
+            if (err) {
+                console.log("error: ", err);
+                result(err, null);
+                return;
+            }
+            console.log("created fixa: ", {
+                id: res.insertId, ...NewFixa
+            });
+            result(null, { id: res.insertId, ...NewFixa });
         });
-        result(null, { id: res.insertId, ...NewFixa });
-    });
 };
 Fixass.findById = (id, result) => {
-    console.log('findById id = ', id)
-    pool.query('SELECT * FROM fixa WHERE id = $1' , [id], (err,
-        res) => {
-        if (err) {
-            //throw error
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
-        if (res.rows.length) {
-            console.log("fixa encontrado: ", res.rows[0]);
-            result(null, res.rows[0]);
-            return;
-        }
-        // not found aluno with the id
-        console.log("fixa nao encontrado: res.length = ", res);
-        result({ kind: "not_found" }, null);
-    });
+    console.log('findById id or nome = ', id)
+
+    if (/^\d+$/.test(id)) {
+
+        pool.query('SELECT * FROM fixa WHERE id = $1', [id], (err,
+            res) => {
+            if (err) {
+                //throw error
+                console.log("error: ", err);
+                result(err, null);
+                return;
+            }
+            if (res.rows.length) {
+                console.log("fixa encontrado: ", res.rows[0]); // isso barra a saida de mais de 1 pessoa
+                result(null, res.rows[0]);
+                return;
+            }
+            // not found aluno with the id
+            console.log("fixa nao encontrado: res.length = ", res);
+            result({ kind: "not_found" }, null);
+        });
+
+    } else if (/^[a-zA-Z\s]+$/.test(id)) {
+
+        pool.query('SELECT * FROM fixa WHERE nome ILIKE $1', [`%${id}%`], (err,
+            res) => {
+            if (err) {
+                //throw error
+                console.log("error: ", err);
+                result(err, null);
+                return;
+            }
+            if (res.rows.length) {
+                console.log("fixa encontrado: ", res.rows); // isso permite a saida de varias pessoas
+                result(null, res.rows);
+                return;
+            }
+            // not found aluno with the id
+            console.log("fixa nao encontrado: res.length = ", res);
+            result({ kind: "not_found" }, null);
+        });
+
+
+    } else {
+
+
+        pool.query('SELECT * FROM fixa WHERE id = $1', [id], (err,
+            res) => {
+            if (err) {
+                //throw error
+                console.log("error: ", err);
+                result(err, null);
+                return;
+            }
+            if (res.rows.length) {
+                console.log("fixa encontrado: ", res.rows[0]);
+                result(null, res.rows[0]);
+                return;
+            }
+            // not found aluno with the id
+            console.log("fixa nao encontrado: res.length = ", res);
+            result({ kind: "not_found" }, null);
+        });
+
+
+
+
+
+    };
+
 };
 Fixass.getAll = (nome, result) => {
     let query = "SELECT * FROM fixa";
     if (nome) {
-        query += " WHERE nome LIKE '%${nome}%'";
+        query += " WHERE nome nome ILIKE $1", [`%${id}%`];
     }
     pool.query(query, (err, res) => {
         if (err) {
@@ -78,7 +130,7 @@ Fixass.updateById = (id, fixa, result) => {
                 return;
             }
             console.log("updated fixa: ", { id: id });
-            result(null, { id: id});
+            result(null, { id: id });
         }
     );
 };

@@ -15,10 +15,10 @@ export default function HomeScreen() {
   const isDarkMode = theme === 'dark';
 
   const [mostrarView, setMostrarView] = useState(false);
-
   const [dados, setDados] = useState([]);
-
   const [linha, setLinha] = useState([]);
+  const [inputs, setInput] = useState("");
+  const [result, setResult] = useState([]);
 
 
   useEffect(() => {
@@ -28,7 +28,28 @@ export default function HomeScreen() {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (inputs.length >= 3) {
+        pesquisa(inputs); // Chama a função para buscar no banco
+      }
+    }, 500); // debounce de 500ms para evitar várias requisições
 
+    return () => clearTimeout(delayDebounce); // limpa o timeout se o texto mudar antes dos 500ms
+  }, [inputs]);
+
+
+  const pesquisa = async (nome = '') => {
+
+    try {
+      // Exemplo de chamada para uma API ou banco de dados
+      const response = await fetch(`http://192.168.18.11:8080/api/fixa/${nome}`);
+      const data = await response.json();
+      setDados(data);
+    } catch (error) {
+      console.error('Erro na busca:', error);
+    }
+  };
 
 
   return (
@@ -71,8 +92,11 @@ export default function HomeScreen() {
 
             <TextInput
               placeholder="Nome"
+              value={inputs}
+              onChangeText={setInput}
               placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
               style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
+
             />
 
           </View>
@@ -88,19 +112,21 @@ export default function HomeScreen() {
           <View style={styles.fixa}>
 
 
-            {dados.map((item, index) => {
+            {dados.length == 0 ? (
+              <Text style={{ color: isDarkMode ? '#fff' : '#000' }}>
+                Não tem nenhuma pessoa com esse nome no banco de dados
+              </Text>
+            ) : (dados.map((item, index) => (
 
-              return (
+              <View key={index}>
+                <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
 
-                <View key={index}>
-                  <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
+                  <SelectPeople dado={item} />
 
-                    <SelectPeople dado={item} />
-
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
+                </TouchableOpacity>
+              </View>
+            ))
+            )}
 
 
 
