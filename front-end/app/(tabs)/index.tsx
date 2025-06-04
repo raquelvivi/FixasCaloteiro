@@ -107,8 +107,6 @@ export default function HomeScreen() {
 
         <View style={styles.main}>
 
-
-
           <View style={styles.fixa}>
 
 
@@ -134,33 +132,11 @@ export default function HomeScreen() {
 
           </View>
 
-
-
-
-          {/* {mostrarView && (
-            <MaisInfor />
-          )} */}
-
-
-
-
-
         </View>
-
 
       </ScrollView >
 
-
     </View >
-
-    // <TouchableWithoutFeedback
-    //   onPress={() => {
-    //     Keyboard.dismiss(); // Fecha o teclado
-    //     setMostrarView(false); // Fecha o componente
-    //   }}
-    // >
-
-    // </TouchableWithoutFeedback>
 
 
 

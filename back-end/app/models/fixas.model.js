@@ -9,6 +9,7 @@ const Fixass = function (fixa) {
     this.bairro = fixa.bairro;
     this.creditomax = fixa.creditomax;
     this.datapaga = fixa.datapaga;
+    this.foto = fixa.foto;
 };
 
 

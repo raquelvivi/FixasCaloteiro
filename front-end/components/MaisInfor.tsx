@@ -2,7 +2,7 @@
 import React from 'react';
 import { View,Image, StyleSheet, useColorScheme } from 'react-native';
 import Row from './Row';
-
+import { Link } from 'expo-router';
 
 
 export default function MaisInfor( {dado = {}}) {
