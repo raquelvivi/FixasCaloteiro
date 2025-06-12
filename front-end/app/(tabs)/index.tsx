@@ -8,6 +8,8 @@ import {
 
 import MaisInfor from '../../components/MaisInfor';
 import SelectPeople from '../../components/SelectPeople';
+import { Pessoa } from '../../types'
+
 
 export default function HomeScreen() {
 
@@ -15,8 +17,8 @@ export default function HomeScreen() {
   const isDarkMode = theme === 'dark';
 
   const [mostrarView, setMostrarView] = useState(false);
-  const [dados, setDados] = useState([]);
-  const [linha, setLinha] = useState([]);
+  const [dados, setDados] = useState<Pessoa[]>([]);
+  const [linha, setLinha] = useState<Pessoa|null>(null);
   const [inputs, setInput] = useState("");
   const [result, setResult] = useState([]);
 
@@ -24,7 +26,7 @@ export default function HomeScreen() {
   useEffect(() => {
     fetch('http://192.168.18.11:8080/api/fixa') // use o IP local da sua máquina
       .then((res) => res.json())
-      .then((data) => setDados(data))
+      .then((data:Pessoa[]) => setDados(data))
       .catch((err) => console.log(err));
   }, []);
 
@@ -44,7 +46,7 @@ export default function HomeScreen() {
     try {
       // Exemplo de chamada para uma API ou banco de dados
       const response = await fetch(`http://192.168.18.11:8080/api/fixa/${nome}`);
-      const data = await response.json();
+      const data:Pessoa[] = await response.json();
       setDados(data);
     } catch (error) {
       console.error('Erro na busca:', error);
@@ -111,10 +113,10 @@ export default function HomeScreen() {
 
 
             {dados.length == 0 ? (
-              <Text style={{ color: isDarkMode ? '#fff' : '#000' }}>
+              <Text style={[styles.texto,{ color: isDarkMode ? '#fff' : '#000' }]}>
                 Não tem nenhuma pessoa com esse nome no banco de dados
               </Text>
-            ) : (dados.map((item, index) => (
+            ) : (dados.map((item:Pessoa, index) => (
 
               <View key={index}>
                 <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
@@ -187,5 +189,9 @@ const styles = StyleSheet.create({
   fixa: {
     display: 'flex',
   },
+
+  texto: {
+    margin: 35
+  }
 
 });

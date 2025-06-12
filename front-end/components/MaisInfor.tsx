@@ -2,46 +2,46 @@
 import React from 'react';
 import { View,Image, StyleSheet, useColorScheme } from 'react-native';
 import Row from './Row';
-import { Link } from 'expo-router';
+import { Pessoa } from '../types'
 
-
-export default function MaisInfor( {dado = {}}) {
+export default function MaisInfor( { dado }: {dado: Pessoa | null }) {
 
     const theme = useColorScheme();
     const isDarkMode = theme === 'dark';
 
 
     console.log (dado);
+    if (dado) {
+        return (
 
-    return (
+            <View style={[styles.MaisInfor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
 
-        <View style={[styles.MaisInfor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
+                <View style={[styles.juntoImagem]}>
 
-            <View style={[styles.juntoImagem]}>
-
-                <Image source={require('../assets/images/rosto.jpeg')} style={[styles.img]} />
-                <View style={{ flexDirection: 'column' }}>
-                    <Row label="Id" valor={dado.id} />
-                    <Row label="Apelido" valor= {dado.apelido} />
-                    
+                    <Image source={require('../assets/images/rosto.jpeg')} style={[styles.img]} />
+                    <View style={{ flexDirection: 'column' }}>
+                        <Row label="Id" valor={dado.id} />
+                        <Row label="Apelido" valor= {dado.apelido} />
+                        
+                    </View>
                 </View>
+
+                <Row label="Nome" valor={dado.nome} />
+                <View style={[styles.cabecalho, { flex: 0.5, }]}>
+                    <Row label="Endereco" valor={dado.logradouro} />
+                    <Row label="N°" valor={dado.numero} />
+                </View>
+                <Row label="Add Compra" valor="Pagar" />
+                <View style={[styles.cabecalho, { flex: 0.5, }]}>
+                    <Row label="Total" valor="200" />
+                    <Row label="Maximo" valor={dado.creditomax} />
+                </View>
+
+
             </View>
 
-            <Row label="Nome" valor={dado.nome} />
-            <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Endereco" valor={dado.logradouro} />
-                <Row label="N°" valor={dado.numero} />
-            </View>
-            <Row label="Add Compra" valor="Pagar" />
-            <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="200" />
-                <Row label="Maximo" valor={dado.creditomax} />
-            </View>
-
-
-        </View>
-
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({

@@ -1,9 +1,6 @@
 
-import React, {useState} from 'react';
 import { View, StyleSheet, useColorScheme } from 'react-native';
 import Row from './Row';
-
-
 
 export default function SelectPeople( { dado = {}} ) {
 
