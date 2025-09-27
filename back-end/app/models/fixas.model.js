@@ -116,6 +116,22 @@ Fixass.getAll = (nome, result) => {
         result(null, res);
     });
 };
+
+// Fixass.getAll = (nome, result) => {
+//   const query = "SELECT * FROM fixa ";
+
+//   pool.query(query, (err, res) => {
+//     if (err) {
+//       console.log("error: ", err);
+//       result(null, err);
+//       return;
+//     }
+//     // console.log("fixa: ", res.rows);
+//     result(null, res);
+//   });
+// };
+
+
 Fixass.updateById = (id, fixa, result) => {
     console.log(fixa)
     pool.query("UPDATE fixa SET nome = $1 , apelido = $2 , logradouro = $3 , numero = $4 , bairro = $5 , creditomax = $6 , datapaga = $7  WHERE id = $8",

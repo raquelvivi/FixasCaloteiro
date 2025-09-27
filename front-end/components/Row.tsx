@@ -6,9 +6,12 @@ import { Link } from 'expo-router';
 
 export default function Row({ tipo = '', label = '', valor = "" }) {
 
+  const branco = 'rgba(255, 255, 255, 0.74)'
     const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
-  const textColor = { color: isDarkMode ? '#000' : '#fff' };
+  const textColor = { color: isDarkMode ? branco : '#000'  };
+
+  //, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)' }
     
   return (
     <View style={styles.cabecalho}>
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
 
     cabecalho: {
 
-        flexDirection: 'row', // esse e a linha de baixo deicharam o label e input no lugar certo
+        flexDirection: 'row',
         alignItems: 'center',
 
 

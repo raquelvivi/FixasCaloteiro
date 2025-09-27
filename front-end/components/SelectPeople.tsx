@@ -1,8 +1,11 @@
 
-import { View, StyleSheet, useColorScheme } from 'react-native';
+import { View, StyleSheet, Dimensions, useColorScheme } from 'react-native';
 import Row from './Row';
+import { Pessoa } from '../types'
 
-export default function SelectPeople( { dado = {}} ) {
+const deviceWidth = Dimensions.get('window').width;
+
+export default function SelectPeople({ dado }: { dado: Pessoa } ) {
 
     const theme = useColorScheme();
     const isDarkMode = theme === 'dark';
@@ -10,7 +13,7 @@ export default function SelectPeople( { dado = {}} ) {
 
     return (
 
-        <View>
+        <View style={[styles.ficha]}>
             <Row label="Nome" valor={dado.nome} />
             <Row label="Apelido" valor={String(dado.apelido)} />
             <View style={[styles.cabecalho, { flex: 0.5, }]}>
@@ -37,4 +40,8 @@ const styles = StyleSheet.create({
         margin: 10,
 
     },
+    ficha:{
+        width: deviceWidth - 50,
+  
+    }
 });

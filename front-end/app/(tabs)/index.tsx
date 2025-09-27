@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, View, TextInput, Text, ScrollView, TouchableOpacity,
-  useColorScheme, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Modal, Platform
+  useColorScheme, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, Platform
 } from 'react-native';
 
 
@@ -16,24 +16,41 @@ export default function HomeScreen() {
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
 
+  const branco = 'rgba(255, 255, 255, 0.57)'
+
   const [mostrarView, setMostrarView] = useState(false);
   const [dados, setDados] = useState<Pessoa[]>([]);
   const [linha, setLinha] = useState<Pessoa|null>(null);
   const [inputs, setInput] = useState("");
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState<Pessoa[]>([]);
 
 
   useEffect(() => {
-    fetch('http://192.168.18.11:8080/api/fixa') // use o IP local da sua máquina
+    fetch('http://192.168.18.52:8080/api/fixa')
       .then((res) => res.json())
-      .then((data:Pessoa[]) => setDados(data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDados(data);
+          setResult(data);
+        } else if (data) {
+          setDados([data]); // transforma objeto único em array
+        } else {
+          setDados([]); // nada encontrado
+        }
+      })
+      .catch((err) => {
+        console.log('Erro no fetch:', err);
+        setDados([]);
+      });
   }, []);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
+
       if (inputs.length >= 3) {
         pesquisa(inputs); // Chama a função para buscar no banco
+      }else if (inputs == "" && result.length > 1) {
+        setDados(result)
       }
     }, 500); // debounce de 500ms para evitar várias requisições
 
@@ -45,18 +62,26 @@ export default function HomeScreen() {
 
     try {
       // Exemplo de chamada para uma API ou banco de dados
-      const response = await fetch(`http://192.168.18.11:8080/api/fixa/${nome}`);
+      const response = await fetch(`http://192.168.18.52:8080/api/fixa/${nome}`);
       const data:Pessoa[] = await response.json();
-      setDados(data);
+      if (Array.isArray(data)) {
+        setDados(data);
+      } else if (data) {
+        setDados([data]);
+      } else {
+        setDados([]);
+      }
+      
     } catch (error) {
       console.error('Erro na busca:', error);
+      setDados([]);
     }
   };
 
 
   return (
 
-    <View>
+    <View >
 
       <Modal
         visible={mostrarView}
@@ -96,8 +121,8 @@ export default function HomeScreen() {
               placeholder="Nome"
               value={inputs}
               onChangeText={setInput}
-              placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
-              style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
+              placeholderTextColor={isDarkMode ? branco : 'rgba(0, 0, 0, 0.6)'}
+              style={[styles.input, { borderBottomColor: isDarkMode ? branco : 'rgba(0,0,0,1)', color: isDarkMode ? 'fff' : 'rgba(0, 0, 0, 1)' }]}
 
             />
 
@@ -119,7 +144,7 @@ export default function HomeScreen() {
             ) : (dados.map((item:Pessoa, index) => (
 
               <View key={index}>
-                <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)' }]}>
+                <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)', borderColor: isDarkMode ? branco : 'rgba(0, 0, 0, 0.47)'  }]}>
 
                   <SelectPeople dado={item} />
 
@@ -152,6 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: '15%',
     marginBottom: '30%',
+    
 
   },
   cabecalho: {
@@ -184,10 +210,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     margin: 10,
+    
+    borderWidth: 2,
 
   },
   fixa: {
     display: 'flex',
+  
   },
 
   texto: {

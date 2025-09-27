@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, View, TextInput, Text, 
-  useColorScheme, Button, Alert
+  useColorScheme, Button, Alert, Dimensions, TouchableOpacity
 } from 'react-native';
 
-
+const deviceWidth = Dimensions.get('window').width;
 
 import MaisInfor from '../../components/MaisInfor';
 import SelectPeople from '../../components/SelectPeople';
@@ -24,6 +24,7 @@ export default function HomeScreen() {
 
   const [dados, setDados] = useState([]);
 
+  const branco = 'rgba(255, 255, 255, 0.7)'
 
   const Form = async () => {
 
@@ -31,7 +32,7 @@ export default function HomeScreen() {
       
 
       try {
-        const resposta = await fetch('http://192.168.18.11:8080/api/fixa', {
+        const resposta = await fetch('http://192.168.18.52:8080/api/fixa', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -61,17 +62,17 @@ export default function HomeScreen() {
 
   return (
 
-    <View>
+    <View style={[ { alignItems: 'center' }]}>
 
-      <Text style={[styles.h1, { color: isDarkMode ? '#fff' : '#000' }]}>Cadastro</Text>
+      <Text style={[styles.h1, { color: isDarkMode ? branco : '#000' }]}>Cadastro</Text>
 
-      <View style={styles.Conteine}>
+      <View style={[styles.Conteine, { borderColor: isDarkMode ? branco : '#000' }]}>
 
         
 
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Nome:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Nome:</Text>
 
           <TextInput
             placeholder="Nome"
@@ -85,7 +86,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Apelido:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Apelido:</Text>
 
           <TextInput
             placeholder="qual é seu apelido"
@@ -99,7 +100,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Endereço:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Endereço:</Text>
 
           <TextInput
             placeholder="digite seu endereço"
@@ -113,7 +114,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Numero:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Numero:</Text>
 
           <TextInput
             placeholder="Numero"
@@ -128,7 +129,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Credito max:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Credito max:</Text>
 
           <TextInput
             placeholder="Credito"
@@ -143,7 +144,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Bairro:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Bairro:</Text>
 
           <TextInput
             placeholder="Bairro"
@@ -157,7 +158,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.row}>
 
-          <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Pagamento:</Text>
+          <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Pagamento:</Text>
 
           <TextInput
             placeholder="Apenas o Dia"
@@ -171,7 +172,9 @@ export default function HomeScreen() {
 
         </View>
 
-        <Button title= "Enviar" onPress={Form} />
+        <TouchableOpacity style={styles.button} onPress={Form}>
+          <Text style={styles.buttonText}>Enviar</Text>
+        </TouchableOpacity>
 
       </View>
 
@@ -184,10 +187,24 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   Conteine: {
     marginTop: 50,
-    backgroundColor: "#171616",
     margin:10,
     padding: 25,
     borderRadius: 20,
+    borderWidth: 2,
+    width: deviceWidth - 40,
+  },
+
+  button:{
+    marginTop: 20,
+    alignContent: "center",
+    backgroundColor: "#4bf46784",
+    padding: 5,
+    margin: 10
+  },
+  buttonText:{
+    color: "#ffffff",
+    textAlign: "center",
+    fontSize: 16,
 
   },
 
@@ -196,8 +213,11 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     width: 200,
     textAlign: 'center',
-    height: 50,
+    height: 45,
     fontSize: 15,
+    position: 'absolute',
+    right: 0
+
 
 
   },
@@ -213,6 +233,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row', // esse e a linha de baixo deicharam o label e input no lugar certo
     alignItems: 'center',
+    marginBottom: 40,
+    
   }
 
 
