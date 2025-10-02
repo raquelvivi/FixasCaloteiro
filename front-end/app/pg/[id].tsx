@@ -5,7 +5,7 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 
 const screenWidth = Dimensions.get("window").width;
 
-import { Pessoa, Compras } from '../../../types'
+import { Pessoa, Compras, ComprasComPessoas } from '../../types'
 
 
 
@@ -18,7 +18,7 @@ export default function TelaComLocalizacaoEGrafico() {
     const { id } = useLocalSearchParams();
 
     const [dados, setDados] = useState<Pessoa | null>(null);
-    const [compras, setCompras] = useState<Compras[]>([]);
+    const [compras, setCompras] = useState<ComprasComPessoas | null>(null);
 
 
     useEffect(() => {
@@ -27,16 +27,24 @@ export default function TelaComLocalizacaoEGrafico() {
 
             (async () => {
                 const resposta = await fetch(`http://192.168.18.52:8080/api/compra/${id}`);
-                const usuario = await resposta.json();
-                setDados(usuario);
+                const usuario: ComprasComPessoas = await resposta.json();
+                setCompras(usuario);
+
+                
+                
+
             })();
 
             // (async () => {       compras
             //     const resposta = await fetch(`http://192.168.18.52:8080/api/fixa/${id}`);
             //     const usuario = await resposta.json();
-            //     setDados(usuario);
+            //     setcompras(usuario);
             // })();
 
+        }
+
+        if (compras?.pessoas) {
+            console.log("Nome da pessoa:", compras.pessoas);
         }
 
 
@@ -45,11 +53,17 @@ export default function TelaComLocalizacaoEGrafico() {
 
     return (
         <View >
-            {dados ? (
-                <Text>{dados.nome}</Text>
+            {compras ? (
+                <>
+                    <Text>Pessoa: {compras.pessoa.nome}</Text>
+                    {compras.compras.map((c, i) => (
+                        <Text key={i}>Compra {c.dia} - {c.total}</Text>
+                    ))}
+                </>
             ) : (
                 <Text>Carregando...</Text>
             )}
+
 
         </View>
     );
@@ -57,6 +71,6 @@ export default function TelaComLocalizacaoEGrafico() {
 
 const styles = StyleSheet.create({
     texto: {
-        color: "#fff"
+        color: "#000"
     }
 });

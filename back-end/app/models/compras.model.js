@@ -41,10 +41,13 @@ Comprass.create = (NewCompras, result) => {
 
 
 Comprass.findById = (id, result) => {
-  const query = `SELECT f.id, c.dia, c.total, tipopag, c.idfuncio, f.nome, f.apelido, f.creditomax, f.datapaga FROM 
-compra c
-join fixa f on c.idfixa = f.id
-where f.id = ${id}`;
+ const query = `
+    SELECT f.id as pessoa_id, f.nome, f.apelido, f.creditomax, f.datapaga,
+           c.id as compra_id, c.dia, c.total, c.tipopag, c.idfuncio
+    FROM compra c
+    JOIN fixa f ON c.idfixa = f.id
+    WHERE f.id = ${id}
+  `;
 
   pool.query(query, (err, res) => {
     if (err) {
@@ -52,16 +55,29 @@ where f.id = ${id}`;
       result(null, err);
       return;
     }
+
     if (res.rows.length) {
-      console.log("compras encontrado: ", res.rows);
-      result(null, res.rows);
+      const pessoa = {
+        id: res.rows[0].pessoa_id,
+        nome: res.rows[0].nome,
+        apelido: res.rows[0].apelido,
+        creditomax: res.rows[0].creditomax,
+        datapaga: res.rows[0].datapaga,
+      };
+
+      const compras = res.rows.map(r => ({
+        id: r.compra_id,
+        dia: r.dia,
+        total: r.total,
+        tipopag: r.tipopag,
+        idfuncio: r.idfuncio
+      }));
+
+      result(null, { pessoa, compras });
       return;
     }
 
-    console.log("compras nao encontrado: res.length = ", res);
-    // console.log("compras: ", res.rows);
-    result(null, res);
-  });
+    result(null, null);})
 };
 
 

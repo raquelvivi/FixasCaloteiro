@@ -27,3 +27,8 @@ export type Compras = {
   idfixa: number
 }
 
+export type ComprasComPessoas = {
+  compras: Compras,
+  pessoas: Pessoa[]
+}
+
