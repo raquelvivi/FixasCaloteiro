@@ -26,7 +26,7 @@ export default function HomeScreen() {
 
 
   useEffect(() => {
-    fetch('http://192.168.18.52:8080/api/fixa')
+    fetch('http://192.168.18.52:8080/api/fixa')//192.168.18.52
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

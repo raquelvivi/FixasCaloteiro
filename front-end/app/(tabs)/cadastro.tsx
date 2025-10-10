@@ -32,7 +32,7 @@ export default function HomeScreen() {
       
 
       try {
-        const resposta = await fetch('http://192.168.18.52:8080/api/fixa', {
+        const resposta = await fetch('http://192.168.18.52:8080/api/fixa', {//192.168.18.52
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderStyle: 'solid',
     width: 200,
-    textAlign: 'center',
+    textAlign: 'left',
     height: 45,
     fontSize: 15,
     position: 'absolute',
