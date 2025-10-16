@@ -33,7 +33,7 @@ export default function MaisInfor({ dado }: { dado: Pessoa | null }) {
                     <Row label="N°" valor={`${dado.numero}`} />
                 </View>
                 <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                    <Row label="Total" valor="200" />
+                    <Row label="Total" valor={String(dado.total)} />
                     <Row label="Maximo" valor={`${dado.creditomax}`} />
                 </View>
                     <Link href={{

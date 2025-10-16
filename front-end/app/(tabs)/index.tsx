@@ -8,7 +8,7 @@ import {
 
 import MaisInfor from '../../components/MaisInfor';
 import SelectPeople from '../../components/SelectPeople';
-import { Pessoa } from '../../types'
+import { Pessoa, ip } from '../../types'
 
 
 export default function HomeScreen() {
@@ -26,7 +26,7 @@ export default function HomeScreen() {
 
 
   useEffect(() => {
-    fetch('http://192.168.18.52:8080/api/fixa')//192.168.18.52
+    fetch(`http://${ip}:8080/api/fixa`)//${ip}
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -62,7 +62,7 @@ export default function HomeScreen() {
 
     try {
       // Exemplo de chamada para uma API ou banco de dados
-      const response = await fetch(`http://192.168.18.52:8080/api/fixa/${nome}`);
+      const response = await fetch(`http://${ip}:8080/api/fixa/${nome}`);
       const data:Pessoa[] = await response.json();
       if (Array.isArray(data)) {
         setDados(data);
@@ -122,7 +122,7 @@ export default function HomeScreen() {
               value={inputs}
               onChangeText={setInput}
               placeholderTextColor={isDarkMode ? branco : 'rgba(0, 0, 0, 0.6)'}
-              style={[styles.input, { borderBottomColor: isDarkMode ? branco : 'rgba(0,0,0,1)', color: isDarkMode ? 'fff' : 'rgba(0, 0, 0, 1)' }]}
+              style={[styles.input, { borderBottomColor: isDarkMode ? branco : 'rgba(0,0,0,1)', color: isDarkMode ? '#fff' : 'rgba(0, 0, 0, 1)' }]}
 
             />
 

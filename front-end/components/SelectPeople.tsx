@@ -17,7 +17,7 @@ export default function SelectPeople({ dado }: { dado: Pessoa } ) {
             <Row label="Nome" valor={dado.nome} />
             <Row label="Apelido" valor={String(dado.apelido)} />
             <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                <Row label="Total" valor="50" />
+                <Row label="Total" valor={String(dado.total)} />
                 <Row label="Maximo" valor={String(dado.creditomax)} />
             </View>
 

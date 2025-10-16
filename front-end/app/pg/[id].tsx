@@ -5,11 +5,11 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 
 const screenWidth = Dimensions.get("window").width;
 
-import { Pessoa, Compras, ComprasComPessoas } from '../../types'
+import { Pessoa, Compras, ComprasComPessoas, ip } from '../../types'
 
 import Pagamento from '../../components/Pagamento';
 
-//192.168.18.52  10.48.9.75
+//192.168.18.52 
 
 export default function TelaComLocalizacaoEGrafico() {
 
@@ -31,7 +31,7 @@ export default function TelaComLocalizacaoEGrafico() {
         if (compras == null) {
 
             (async () => {
-                const resposta = await fetch(`http://192.168.18.52:8080/api/compra/${id}`);
+                const resposta = await fetch(`http://${ip}:8080/api/compra/${id}`);
                 const usuario: ComprasComPessoas = await resposta.json();
                 setCompras(usuario);
 
@@ -76,7 +76,11 @@ export default function TelaComLocalizacaoEGrafico() {
             )
             }
 
-            <Pagamento id={id} tipo= {view} ></Pagamento>
+
+            {compras && (
+                <Pagamento id={id} tipo={view} dados={compras} ></Pagamento>
+            )}
+            
 
 
 

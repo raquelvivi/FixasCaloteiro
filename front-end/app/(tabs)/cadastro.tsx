@@ -6,6 +6,8 @@ import {
 
 const deviceWidth = Dimensions.get('window').width;
 
+import {  ip } from '../../types'
+
 import MaisInfor from '../../components/MaisInfor';
 import SelectPeople from '../../components/SelectPeople';
 
@@ -32,7 +34,7 @@ export default function HomeScreen() {
       
 
       try {
-        const resposta = await fetch('http://192.168.18.52:8080/api/fixa', {//192.168.18.52
+        const resposta = await fetch(`http://${ip}:8080/api/fixa`, {//192.168.18.52
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

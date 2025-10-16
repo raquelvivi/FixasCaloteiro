@@ -1,18 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, ScrollView, useColorScheme, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, useColorScheme, TextInput } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function Pagamento({ id, tipo }: { id: String[] | String, tipo: number }) {
+import { ComprasComPessoas, Compras, ip } from '../types'
+
+function calculo(d: ComprasComPessoas) {
+    let total = 0
+
+    for (let v = 0; v < d.compras.length; v++) {
+        total = total + d.compras[v].total;
+    }
+
+
+
+    return total
+}
+
+async function Pagar(list: {}) {
+    console.log(list)
+
+}
+
+async function Comprar(list: {}) {
+
+    //c192.168.18.52
+
+    if (list) {
+        if (list.total){
+             try {
+            const response = await fetch(`http://${ip}:8080/api/compra`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(list),
+            });
+
+
+            console.log('salvo no servidor com sucesso!');
+
+        } catch (error) {
+            console.error('Erro ao salvar no servidor:', error);
+        }
+        }
+
+        alert("coloque um valor")
+
+       
+    }
+
+
+}
+
+export default function Pagamento({ id, tipo, dados }: { id: String[] | String, tipo: number, dados: ComprasComPessoas }) {
 
     const theme = useColorScheme();
     const isDarkMode = theme === 'dark';
     const branco = 'rgba(255, 255, 255, 0.66)'
 
-    const [datapaga, setDatapaga] = useState("");
+    const [comp, setComp] = useState<number>(0);
+    const [paga, setPaga] = useState<number>(0);
 
     const [quem, setQuem] = useState(true);
+    const [total, setTotal] = useState<number>(0);
+
+
+    console.log(dados.compras)
 
     useEffect(() => {
         if (tipo === 1) {
@@ -20,7 +73,29 @@ export default function Pagamento({ id, tipo }: { id: String[] | String, tipo: n
         } else {
             setQuem(false);
         }
+
+        if (dados) {
+            setTotal(calculo(dados))
+        }
+
+
+
+
+
     }, [tipo]); // só roda quando 'tipo' muda
+
+
+    const hoje = new Date();
+    const dataFormatada = hoje.toISOString().split('T')[0];
+
+    var list = {
+        dia: dataFormatada,
+        total: comp,
+        apagar: comp,
+        tipopag: "Fiado",
+        idfuncio: 12,
+        idfixa: id
+    }
 
 
 
@@ -30,17 +105,18 @@ export default function Pagamento({ id, tipo }: { id: String[] | String, tipo: n
         <>
 
             {quem ? (
-                <View style={[styles.button, styles.pagar]}>
+                <View style={[styles.pagar]}>
                     <Text style={[styles.tituloC, { color: isDarkMode ? branco : "#000000" }]}> Novo Pagamento </Text>
 
 
                     <View style={styles.row}>
                         <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Pagamento:</Text>
 
+
                         <TextInput
                             placeholder="Valor do Pagamento"
-                            value={datapaga}
-                            onChangeText={setDatapaga}
+                            value={paga.toString()}
+                            onChangeText={(text) => setPaga(Number(text) || 0)}
                             keyboardType="numeric"
                             placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
                             style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
@@ -48,14 +124,15 @@ export default function Pagamento({ id, tipo }: { id: String[] | String, tipo: n
                         />
                     </View>
 
+                    <Text style={[styles.total, { color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)', backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)' }]}>Total: {total - paga}</Text>
 
-
-                    <Text style={[styles.total, { color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)', backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)' }]}>Total: </Text>
-                    <Text style={[styles.salvar, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.88)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0,0,0,1)' }]}>Salvar</Text>
+                    <TouchableOpacity onPress={() => { Pagar(list), setTotal(total - paga), setPaga(0) }} >
+                        <Text style={[styles.salvar, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.88)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0,0,0,1)' }]}>Salvar</Text>
+                    </TouchableOpacity>
                 </View>
             )
                 : (
-                    <View style={[styles.button, styles.comprar]}>
+                    <View style={[styles.comprar]}>
                         <Text style={[styles.tituloC, { color: isDarkMode ? branco : "#000000" }]}> Nova Compra </Text>
 
 
@@ -64,8 +141,8 @@ export default function Pagamento({ id, tipo }: { id: String[] | String, tipo: n
 
                             <TextInput
                                 placeholder="Valor da Compra"
-                                value={datapaga}
-                                onChangeText={setDatapaga}
+                                value={comp.toString()}
+                                onChangeText={(text) => setComp(Number(text) || 0)}
                                 keyboardType="numeric"
                                 placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
                                 style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
@@ -73,14 +150,16 @@ export default function Pagamento({ id, tipo }: { id: String[] | String, tipo: n
                             />
                         </View>
 
-                        <View style={styles.rowC }>
-                            <Text style={[styles.imagem, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.6)': 'rgba(0, 0, 0, 1)'  }]}>Tirar Foto </Text>
-                            <Text style={[styles.total, { color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)', backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)' }]}>Total: </Text>
+
+                        <View style={styles.rowC}>
+                            <Text style={[styles.imagem, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 1)' }]}>Tirar Foto </Text>
+                            <Text style={[styles.total, { color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)', backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)' }]}>Total: {total + comp} </Text>
 
                         </View>
 
-                        
-                        <Text style={[styles.salvar, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.88)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0,0,0,1)' }]}>Salvar</Text>
+                        <TouchableOpacity onPress={() => { Comprar(list), setTotal(total + comp), setComp(0) }} >
+                            <Text style={[styles.salvar, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.88)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0,0,0,1)' }]}>Salvar</Text>
+                        </TouchableOpacity>
                     </View>
                 )}
 
@@ -106,7 +185,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     row: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "space-around",
         marginBottom: 40,
@@ -114,8 +193,8 @@ const styles = StyleSheet.create({
 
 
     },
-    rowC:{
-        flexDirection: 'row', 
+    rowC: {
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "space-around",
     },
@@ -160,7 +239,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 20,
     },
-    imagem:{
+    imagem: {
         width: 100,
         padding: 5,
         borderRadius: 5,

@@ -9,6 +9,7 @@ export type Pessoa = { //ficha
   foto: string,
   datapaga: number,
   tipofoto: string,
+  total: number
 }
 export type Funcio = {
   id: number,
@@ -28,7 +29,9 @@ export type Compras = {
 }
 
 export type ComprasComPessoas = {
-  compras: Compras,
+  compras: Compras[],
   pessoas: Pessoa[]
 }
+
+export const ip = '10.48.9.49' //192.168.18.52
 

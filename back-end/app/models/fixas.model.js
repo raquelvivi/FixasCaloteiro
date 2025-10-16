@@ -102,10 +102,22 @@ Fixass.findById = (id, result) => {
 
 };
 Fixass.getAll = (nome, result) => {
-    let query = "SELECT * FROM fixa";
-    if (nome) {
-        query += " WHERE nome nome ILIKE $1", [`%${id}%`];
-    }
+    let query = `SELECT 
+     f.id, f.nome, f.apelido, f.logradouro, f.numero,
+      f.creditomax, f.bairro,f.foto, f.datapaga, f.tipofoto,
+    SUM(c.apagar) as total
+FROM 
+    compra c
+JOIN 
+    fixa f 
+ON 
+    c.idfixa = f.id
+GROUP BY 
+    f.id
+ORDER BY 
+    f.nome DESC;
+`;
+    
     pool.query(query, (err, res) => {
         if (err) {
             console.log("error: ", err);

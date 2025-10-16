@@ -13,15 +13,14 @@ const Comprass = function (compras) {
 
 Comprass.create = (NewCompras, result) => {
   pool.query(
-    "INSERT INTO compras (nome, apelido, logradouro, numero, bairro, creditomax, datapaga) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+    "INSERT INTO compra (dia, total, apagar, tipopag, idfuncio, idfixa) VALUES ($1, $2, $3, $4, $5, $6)",
     [
-      NewCompras.nome,
-      NewCompras.apelido,
-      NewCompras.logradouro,
-      NewCompras.numero,
-      NewCompras.bairro,
-      parseFloat(NewCompras.creditomax),
-      parseInt(NewCompras.datapaga),
+      NewCompras.dia,
+      parseInt(NewCompras.total),
+      NewCompras.apagar,
+      NewCompras.tipopag,
+      NewCompras.idfuncio,
+      NewCompras.idfixa,
     ],
     (err, res) => {
       if (err) {
@@ -43,7 +42,7 @@ Comprass.create = (NewCompras, result) => {
 Comprass.findById = (id, result) => {
  const query = `
     SELECT f.id as pessoa_id, f.nome, f.apelido, f.creditomax, f.datapaga,
-           c.id as compra_id, c.dia, c.total, c.tipopag, c.idfuncio
+           c.id as compra_id, c.dia, c.total, c.tipopag, c.idfuncio, c.apagar
     FROM compra c
     JOIN fixa f ON c.idfixa = f.id
     WHERE f.id = ${id}
@@ -65,12 +64,13 @@ Comprass.findById = (id, result) => {
         datapaga: res.rows[0].datapaga,
       };
 
-      const compras = res.rows.map(r => ({
+      const compras = res.rows.map((r) => ({
         id: r.compra_id,
         dia: r.dia,
         total: r.total,
         tipopag: r.tipopag,
-        idfuncio: r.idfuncio
+        idfuncio: r.idfuncio,
+        total: r.apagar
       }));
 
       result(null, { pessoa, compras });
@@ -112,6 +112,8 @@ Comprass.updateById = (id, compras, result) => {
     }
   );
 };
+
+
 Comprass.remove = (id, result) => {
   pool.query("DELETE FROM compra WHERE id = $1", id, (err, res) => {
     if (err) {
