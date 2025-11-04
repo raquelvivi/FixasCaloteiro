@@ -6,7 +6,7 @@ import {
 
 const deviceWidth = Dimensions.get('window').width;
 
-import {  ip } from '../../types'
+import {  ip, Pessoa} from '../../types'
 
 import MaisInfor from '../../components/MaisInfor';
 import SelectPeople from '../../components/SelectPeople';
@@ -24,14 +24,16 @@ export default function HomeScreen() {
   const [bairro, setBairro] = useState("");
   const [datapaga, setDatapaga] = useState("");
 
+  const [id, setId] = useState("");
+
   const [dados, setDados] = useState([]);
 
   const branco = 'rgba(255, 255, 255, 0.7)'
 
   const Form = async () => {
 
-    if(nome && apelido && logradouro && numero && creditomax && bairro && datapaga){
-      
+
+    if (nome && apelido && logradouro && numero && creditomax && bairro && datapaga) {
 
       try {
         const resposta = await fetch(`http://${ip}:8080/api/fixa`, {//192.168.18.52
@@ -39,29 +41,23 @@ export default function HomeScreen() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ nome, apelido, logradouro,numero,creditomax, bairro, datapaga })
+          body: JSON.stringify({ nome, apelido, logradouro, numero, creditomax, bairro, datapaga })
         });
-    
+
         setDados(await resposta.json());
-    
-        if (dados){
+
+        if (dados) {
           console.log("cadastrado com sucesso")
         }
-    
+
       }
-      catch (erro){
+      catch (erro) {
         Alert.alert('Erro', 'Não foi possível conectar ao servidor.');
         console.error(erro);
-      }
+      };
 
-
-    }else{
-      console.log ("preencha todos os campos")
-    }
-
-  }
-
-
+  }}
+  
   return (
 
     <View style={[ { alignItems: 'center' }]}>

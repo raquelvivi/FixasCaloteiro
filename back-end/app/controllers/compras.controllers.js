@@ -86,6 +86,8 @@ ${req.params.id}.`,
   );
 };
 
+
+
 exports.delete = (req, res) => {
   Compras.remove(req.params.id, (err, data) => {
     if (err) {

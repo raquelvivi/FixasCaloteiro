@@ -46,6 +46,7 @@ Comprass.findById = (id, result) => {
     FROM compra c
     JOIN fixa f ON c.idfixa = f.id
     WHERE f.id = ${id}
+    ORDER by dia asc
   `;
 
   pool.query(query, (err, res) => {
@@ -62,6 +63,7 @@ Comprass.findById = (id, result) => {
         apelido: res.rows[0].apelido,
         creditomax: res.rows[0].creditomax,
         datapaga: res.rows[0].datapaga,
+        
       };
 
       const compras = res.rows.map((r) => ({
@@ -70,7 +72,7 @@ Comprass.findById = (id, result) => {
         total: r.total,
         tipopag: r.tipopag,
         idfuncio: r.idfuncio,
-        total: r.apagar
+        apagar: r.apagar
       }));
 
       result(null, { pessoa, compras });
@@ -85,25 +87,16 @@ Comprass.findById = (id, result) => {
 Comprass.updateById = (id, compras, result) => {
   console.log(compras);
   pool.query(
-    "UPDATE compras SET nome = $1 , apelido = $2 , logradouro = $3 , numero = $4 , bairro = $5 , creditomax = $6 , datapaga = $7  WHERE id = $8",
-    [
-      compras.nome,
-      compras.apelido,
-      compras.logradouro,
-      compras.numero,
-      compras.bairro,
-      compras.creditomax,
-      compras.datapaga,
-      id,
-    ],
+    "UPDATE compra SET apagar = $1, tipopag = 'Pago'  WHERE id = $2",
+    [parseInt(compras.apagar), id],
+
     (err, res) => {
       if (err) {
         console.log("error: ", err);
         result(null, err);
         return;
       }
-      if (res.affectedRows == 0) {
-
+      if (res.rowCount == 0) {
         result({ kind: "not_found" }, null);
         return;
       }

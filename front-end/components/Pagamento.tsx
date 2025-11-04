@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, useColorScheme, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, useColorScheme, TextInput, Alert } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 
 const screenWidth = Dimensions.get("window").width;
@@ -10,7 +10,7 @@ function calculo(d: ComprasComPessoas) {
     let total = 0
 
     for (let v = 0; v < d.compras.length; v++) {
-        total = total + d.compras[v].total;
+        total = total + d.compras[v].apagar;
     }
 
 
@@ -18,35 +18,127 @@ function calculo(d: ComprasComPessoas) {
     return total
 }
 
-async function Pagar(list: {}) {
-    console.log(list)
+async function Pagar(valor: number, compras: Compras[]) {
 
-}
+    console.log(compras)
 
-async function Comprar(list: {}) {
 
-    //c192.168.18.52
+    if (compras[0].apagar == valor) {
 
-    if (list) {
-        if (list.total){
-             try {
-            const response = await fetch(`http://${ip}:8080/api/compra`, {
-                method: 'POST',
+        let v = 0
+
+        try {
+            const response = await fetch(`http://${ip}:8080/api/compra/${compras[0].id}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(list),
+                body: JSON.stringify({
+                    apagar: 0,
+                    tipopag: 'Pago'
+                }),
             });
-
 
             console.log('salvo no servidor com sucesso!');
 
         } catch (error) {
             console.error('Erro ao salvar no servidor:', error);
         }
+        alert("igual")
+    }
+    if (compras[0].apagar < valor) {
+        alert("maior")
+
+        let total = 0, vezes = 0, list = [];
+
+
+        for (let v = 0; v < compras.length; v++) {
+            if (total < valor) {
+
+                total = total + compras[v].apagar;
+
+                list.push(compras[v].id)
+                list.push(compras[v].apagar)
+
+                vezes++;
+                vezes++;
+
+            } else {
+
+                let vi = 0
+
+                while (vi < vezes) {
+
+                    let viv = list[vi + 1] - valor;
+                    valor = valor - list[vi + 1];
+
+                    if (viv < 0) { viv = 0 }
+
+                    try {
+                        const response = await fetch(`http://${ip}:8080/api/compra/${list[vi]}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                apagar: viv,
+                                tipopag: 'Pago'
+                            }),
+                        });
+
+                        console.log('salvo no servidor com sucesso!');
+
+                    } catch (error) {
+                        console.error('Erro ao salvar no servidor:', error);
+                    }
+
+                    vi++;
+                    vi++;
+
+                    if (valor <= 0) {
+                        break
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+async function Comprar(list: {}) {
+
+    //c192.168.18.52
+
+    if (list) {
+        if (list.total) {
+            try {
+                const response = await fetch(`http://${ip}:8080/api/compra`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(list),
+                });
+
+
+                console.log('salvo no servidor com sucesso!');
+
+            } catch (error) {
+                console.error('Erro ao salvar no servidor:', error);
+            }
+        } else {
+            Alert.alert('Campo Vazio',
+                'Porfavor Adicione um valor antes de salvar a compra');
+
         }
 
-        alert("coloque um valor")
 
-       
+
+
     }
 
 
@@ -65,7 +157,7 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
     const [total, setTotal] = useState<number>(0);
 
 
-    console.log(dados.compras)
+    console.log(dados.pessoa.creditomax)
 
     useEffect(() => {
         if (tipo === 1) {
@@ -100,6 +192,8 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
 
 
 
+
+
     return (
 
         <>
@@ -118,6 +212,7 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
                             value={paga.toString()}
                             onChangeText={(text) => setPaga(Number(text) || 0)}
                             keyboardType="numeric"
+                            maxLength={3} //caracteres maximos
                             placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
                             style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
 
@@ -126,7 +221,23 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
 
                     <Text style={[styles.total, { color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)', backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.6)' }]}>Total: {total - paga}</Text>
 
-                    <TouchableOpacity onPress={() => { Pagar(list), setTotal(total - paga), setPaga(0) }} >
+                    <TouchableOpacity onPress={() => {
+                        if (paga <= total && paga != null && paga != 0) {
+                            Pagar(paga, dados.compras),
+                                setTotal(total - paga),
+                                setPaga(0)
+                        } else {
+                            if (paga > total) {
+                                Alert.alert('Pagamento grande',
+                                    `O valor estrapola o total de dividas do cliente dessa forma o saldo vai ser quitado e ${paga - total} reais deve ser devolvido`);
+                            } else {
+                                Alert.alert('Valor não inserido',
+                                    `Porfavor adicione um valor a ser processado`);
+                            }
+
+
+                        }
+                    }}  >
                         <Text style={[styles.salvar, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.88)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0,0,0,1)' }]}>Salvar</Text>
                     </TouchableOpacity>
                 </View>
@@ -142,8 +253,13 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
                             <TextInput
                                 placeholder="Valor da Compra"
                                 value={comp.toString()}
-                                onChangeText={(text) => setComp(Number(text) || 0)}
-                                keyboardType="numeric"
+                                onChangeText={(text) => {
+                                    // permite ponto e vírgula no meio
+                                    const valor = text.replace(',', '.');
+                                    setComp(parseFloat(valor) || 0);
+                                }}
+                                keyboardType="decimal-pad" // <-- aceita ponto e vírgula
+                                maxLength={3} //caracteres maximos
                                 placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
                                 style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
 
@@ -157,7 +273,17 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
 
                         </View>
 
-                        <TouchableOpacity onPress={() => { Comprar(list), setTotal(total + comp), setComp(0) }} >
+                        <TouchableOpacity onPress={() => {
+                            if ((total + comp) < dados.pessoa.creditomax) {
+                                Comprar(list),
+                                    setTotal(total + comp),
+                                    setComp(0)
+                            } else {
+                                Alert.alert('Compra muito grande',
+                                    'Não foi possivel realizar a compra pois o valor inserido ultrapassa o permitido');
+
+                            }
+                        }} >
                             <Text style={[styles.salvar, { color: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 0.88)', backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0,0,0,1)' }]}>Salvar</Text>
                         </TouchableOpacity>
                     </View>
