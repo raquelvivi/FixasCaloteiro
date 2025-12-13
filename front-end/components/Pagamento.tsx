@@ -16,161 +16,27 @@ function calculo(d: ComprasComPessoas) {
     return total
 }
 
-async function Pagar(valor: number, compras: Compras[]) {
-  console.log(compras);
+async function Pagar(valor: number, compras: Compras[], total: number, id: string) {
+ 
 
-  for (let v = 0; v < compras.length; v++) {
-    //se o valor da conta for igual ao valor pago, zera a conta.
-    if (compras[v].apagar == valor) {
-      try {
-        const response = await fetch(
-          `http://${ip}:8080/api/compra/${compras[v].id}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              apagar: 0,
-              tipopag: "Pago",
-            }),
-          }
-        );
+    try {
+      const response = await fetch(
+        `http://${ip}:8080/api/compra/grande/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pago: valor,
+          }),
+        }
+      );
 
-        console.log("salvo no servidor com sucesso!");
-      } catch (error) {
-        console.error("Erro ao salvar no servidor:", error);
-      }
-      console.log("execultou: ", v);
-
-      return "feito";
-    }
-
-    //se o valor da conta for maior ao valor pago,
-    //então o valor atual da conta sera: o valor antigo - o valor pago.
-    //Sempre sobrarar algo a pagar
-    if (compras[v].apagar >= valor) {
-      let novoTotal = compras[v].apagar - valor;
-
-      try {
-        const response = await fetch(
-          `http://${ip}:8080/api/compra/${compras[v].id}`,
-          {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              apagar: novoTotal,
-              tipopag: "Pago",
-            }),
-          }
-        );
-
-        console.log("salvo no servidor com sucesso!");
-      } catch (error) {
-        console.error("Erro ao salvar no servidor:", error);
-      }
-      console.log("execultou como maior e sobrou: ", novoTotal);
-
-      return "feito, divida > pago";
+      console.log("salvo no servidor com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar no servidor:", error);
     }
   }
 
-  //isso é caso tenha muitas compras para pagar mas
-  //todas de valor baixo se comparado ao pagamento
-  if (compras[0].apagar < valor) {
-    alert("maior");
-
-    let total = 0, // lista de total de dividas
-      vezes = 0, // vezes é a localização dos ids (tamanho do vetor)
-      lista = [], // lista de id das dividas
-      v = 0;
-    
-      //a questão é ir juntando as migalhas de cada conta, afim de conseguir juntar
-      //contas suficientes para descontar o valor total pago usando um for  
-    while (total < valor) {
-
-        //se total for menor que o valor prosiga porque ainda não temos o suficiente para descontar
-        if (compras[v].apagar != 0) {
-          //se a conta não tiver valor a pagar pula (melhora a rapidez)
-          total = total + compras[v].apagar;
-
-          lista.push(compras[v].id);
-          console.log(compras[v].apagar);
-          console.log(lista)
-          vezes++;
-
-        }
-        v++;
-    }
-       
-        //conseguimos os valores bora cadastrar
-        let vi = 0;
-
-        while (vi < vezes) {
-          //vai execultar um put para cada id coletado
-
-          //se valor for maior que o valor da divida então
-          //diminui o total de valor porque essa parte ja foi descontada do pagamento
-          //e a conta zera
-          console.log(compras[vi].id);
-          if (valor >= compras[vi].apagar) {
-            valor = valor - compras[vi].apagar;
-            
-            console.log('entrei');
-            try {
-              const response = await fetch(
-                `http://${ip}:8080/api/compra/${lista[vi]}`,
-                {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    apagar: 0, //a conta zera por ser menor que o valor pago
-                    tipopag: "Pago",
-                  }),
-                }
-              );
-
-              console.log("salvo no servidor com sucesso!");
-            } catch (error) {
-              console.error("Erro ao salvar no servidor:", error);
-            }
-          } else {
-            //se valor não for maior que o valor da divida então
-            //diminui da divida o valor pago, porque a criatura ainda esta devendo
-            //e o valor pago zera porque ele pagou menos do que devia
-            let viv = compras[vi].apagar - valor;
-            valor = 0;
-
-            if (viv != 0) {
-              console.log("viv é maior, resta divida", viv)
-              console.log(compras[vi].apagar);
-            }
-
-            try {
-              const response = await fetch(
-                `http://${ip}:8080/api/compra/${lista[vi]}`,
-                {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    apagar: viv, //mantem um dinheiro porque o cliente não pagou tudo
-                  }),
-                }
-              );
-
-              console.log("salvo no servidor com sucesso!");
-            } catch (error) {
-              console.error("Erro ao salvar no servidor:", error);
-            }
-          }
-
-          vi++;
-
-          if (valor === 0) {
-            //valor = 0 porque tudo que foi pago ja foi descontado
-            return "feito";
-          }
-        }
-      }
-    }
   
 
 
@@ -312,7 +178,7 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
           <TouchableOpacity
             onPress={() => {
               if (paga <= total && paga != null && paga != 0) {
-                let vivi = Pagar(paga, dados.compras);
+                let vivi = Pagar(paga, dados.compras, total, id);
                 setTotal(total - paga), setPaga(0);
                 console.log("deu certo? ", vivi)
               } else {

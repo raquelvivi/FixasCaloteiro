@@ -41,8 +41,10 @@ exports.create = (req, res) => {
 // };
 
 exports.findAll = (req, res) => {
+  console.log(req.body);
   Compras.findById(req.params.id, (err, data) => {
 
+    
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -56,6 +58,7 @@ exports.findAll = (req, res) => {
     } else res.send(data);
   });
 };
+
 
 exports.update = (req, res) => {
   if (!req.body) {
@@ -87,6 +90,37 @@ ${req.params.id}.`,
 };
 
 
+
+exports.updatesMultiplos = (req, res) => {
+
+  if (!req.body) {
+    return res.status(400).send({
+      message: "Body Vaziu",
+    });
+  }
+ 
+  
+  Compras.updateByIdCompras(
+    req.params.id,
+    req.body.pago,
+
+    (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `(controllers) erro ao achar a fixa com id:
+${req.params.id}.`,
+          });
+        } else {
+          res.status(500).send({
+            message:
+              "(controllers) erro ao mudar compra com id: " + req.params.id,
+          });
+        }
+      } else res.send(data);
+    }
+  );
+};
 
 exports.delete = (req, res) => {
   Compras.remove(req.params.id, (err, data) => {

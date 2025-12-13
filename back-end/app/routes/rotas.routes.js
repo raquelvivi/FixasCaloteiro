@@ -17,16 +17,8 @@ module.exports = app => {
   // router.get("/api/compra", Compras.findAll);
   router.get("/api/compra/:id", Compras.findAll);
   router.put("/api/compra/:id", Compras.update);
-  // router.delete("/api/compra/:id", Compras.delete);
-  // router.delete("/api/compra", Compras.deleteAll);
-
-  // FUNCIONARIO
-  // router.post("/api/funcio", Funcios.create);
-  // router.get("/api/funcio", Funcios.findAll);
-  // router.get("/api/funcio/:id", Funcios.findOne);
-  // router.put("/api/funcio/:id", Funcios.update);
-  // router.delete("/api/funcio/:id", Funcios.delete);
-  // router.delete("/api/funcio", Funcios.deleteAll);
+  router.put("/api/compra/grande/:id", Compras.updatesMultiplos);
+  
 
   app.use("/", router);
 };
