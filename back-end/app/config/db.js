@@ -1,28 +1,40 @@
-const pg = require("pg");
-const { Pool, Client } = pg;
-const dbConfig = require("../config/db.config.js");
+require("dotenv").config();
+const { Pool } = require("pg");
+
+console.log("Conectando ao banco em:", process.env.DB_HOST);
+
 const pool = new Pool({
-    host: dbConfig.HOST,
-    database: dbConfig.DATABASE,
-    user: dbConfig.USER,
-    password: dbConfig.PASSWORD,
-    port: dbConfig.PORT,
-    /* max = número máximo de clientes no pool */
-    max: dbConfig.MAX,
-    /* idleTimeoutMillis = Número de milissegundos que um cliente deve
-    ficar ocioso no pool
-    e não ser verificado, antes de ser desconectado. O pool manterá os
-    clientes abertos e
-    conectados ao backend até que o idleTimeoutMillis expire para cada
-    cliente.*/
-    idleTimeoutMillis: dbConfig.IDLETIMEOUTMILLIS,
-    /*
-    connectionTimeoutMillis = Número de milissegundos para esperar
-    antes do tempo limite ao conectar
-    um novo cliente por padrão é 0, o que significa que não há tempo
-    limite
-    */
-    connectionTimeoutMillis: dbConfig.CONNECTIONTIMEOUTMILLIS
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  port: Number(process.env.DB_PORT),
+  ssl: {
+    rejectUnauthorized: false, 
+  },
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
+
+console.log("terminou aqui");
+
 module.exports = pool;
-// para criar um novo client: const client = await pool.connect()
+
+// pool.connect((err, client, release) => {
+//   if (err) {
+//     console.error("Erro ao conectar:", err);
+//     process.exit(1);
+//   }
+
+//   client.query("SELECT NOW()", (err, res) => {
+//     release();
+//     if (err) {
+//       console.error("Erro na query:", err);
+//       process.exit(1);
+//     }
+
+//     console.log("Conexão OK! Hora do servidor:", res.rows[0].now);
+//     process.exit(0);
+//   });
+// });

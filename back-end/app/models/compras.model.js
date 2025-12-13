@@ -63,7 +63,6 @@ Comprass.findById = (id, result) => {
         apelido: res.rows[0].apelido,
         creditomax: res.rows[0].creditomax,
         datapaga: res.rows[0].datapaga,
-        
       };
 
       const compras = res.rows.map((r) => ({

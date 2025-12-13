@@ -17,7 +17,7 @@ INSERT INTO funcio(nome, login, senha, tipo) VALUES
   ('Maria das Graças Batista Dantas', 'Gracinha', 'gracinha123', 'dono'),
   ('Vivian Raquel Batista Dantas', 'Vivian', 'vivian123', 'filho dos donos'),
   ('Joao Victor Batista Dantas', 'Joao', 'joao123', 'filho dos donos'),
-  ('Manoel Vitoriano Dantas', 'Manoel', 'manoel123', 'dono')
+  ('Manoel Vitoriano Dantas', 'Manoel', 'manoel123', 'dono');
 
 
 -- ==============================

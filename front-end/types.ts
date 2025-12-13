@@ -33,5 +33,7 @@ export type ComprasComPessoas = {
   pessoas: Pessoa[]
 }
 
-export const ip = '10.209.184.164' //192.168.18.52   10.48.9.126
+export const ip = "192.168.18.52"; //192.168.18.52   10.48.9.126
+
+
 

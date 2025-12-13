@@ -10,6 +10,9 @@ import MaisInfor from '../../components/MaisInfor';
 import SelectPeople from '../../components/SelectPeople';
 import { Pessoa, ip } from '../../types'
 
+export const mudou = 0;
+
+
 
 export default function HomeScreen() {
 
@@ -23,14 +26,18 @@ export default function HomeScreen() {
   const [linha, setLinha] = useState<Pessoa|null>(null);
   const [inputs, setInput] = useState("");
   const [result, setResult] = useState<Pessoa[]>([]);
+  const [reset, setReset] = useState(0);
+
+  const [loading, setLoading] = useState(true); // tela de carregamento
 
 
+  // Pesquisa no banco as Fixas
   useEffect(() => {
-    fetch(`http://${ip}:8080/api/fixa`)//${ip}
+    fetch(`http://${ip}:8080/api/fixa`) //${ip}
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          setDados(data);
+          setDados(data); //dados e result recebem as fixas
           setResult(data);
         } else if (data) {
           setDados([data]); // transforma objeto único em array
@@ -39,16 +46,17 @@ export default function HomeScreen() {
         }
       })
       .catch((err) => {
-        console.log('Erro no fetch:', err);
+        console.log("Erro no fetch:", err);
         setDados([]);
       });
-  }, []);
+  });
 
+  // pesquisa de fixas no input
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
 
-      if (inputs.length >= 3) {
-        pesquisa(inputs); // Chama a função para buscar no banco
+      if (inputs.length >= 3) { // So busca no banco se for digitado 3 ou mais letras
+        pesquisa(inputs); // Chama a função pesquisa para pesquisar por fixas com o nome x
       }else if (inputs == "" && result.length > 1) {
         setDados(result)
       }
@@ -58,10 +66,11 @@ export default function HomeScreen() {
   }, [inputs]);
 
 
+
+  // Pesquisa fixa por nome no banco de dados
   const pesquisa = async (nome = '') => {
 
     try {
-      // Exemplo de chamada para uma API ou banco de dados
       const response = await fetch(`http://${ip}:8080/api/fixa/${nome}`);
       const data:Pessoa[] = await response.json();
       if (Array.isArray(data)) {
@@ -77,6 +86,8 @@ export default function HomeScreen() {
       setDados([]);
     }
   };
+
+  
 
 
   return (
