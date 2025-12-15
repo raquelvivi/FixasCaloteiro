@@ -110,7 +110,7 @@ export default function Pagamento({ id, tipo, dados }: { id: String[] | String, 
   const hoje = new Date();
   const dataFormatada = hoje.toISOString().split("T")[0];
 
-  var list = {
+  let list = { //tente com let depois
     dia: dataFormatada,
     total: comp,
     apagar: comp,
