@@ -36,7 +36,7 @@ export default function HomeScreen() {
     if (nome && apelido && logradouro && numero && creditomax && bairro && datapaga) {
 
       try {
-        const resposta = await fetch(`http://${ip}:8080/api/fixa`, {//192.168.18.52
+        const resposta = await fetch(`http://${ip}/api/fixa`, {//192.168.18.52
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

@@ -28,12 +28,12 @@ export default function HomeScreen() {
   const [result, setResult] = useState<Pessoa[]>([]);
   const [reset, setReset] = useState(0);
 
-  const [loading, setLoading] = useState(true); // tela de carregamento
+  const [loading, setLoading] = useState(0); // tela de carregamento
 
 
   // Pesquisa no banco as Fixas
   useEffect(() => {
-    fetch(`http://${ip}:8080/api/fixa`) //${ip}
+    fetch(`https://fixascaloteiroback.onrender.com/api/fixa`) //${ip}
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -49,16 +49,18 @@ export default function HomeScreen() {
         console.log("Erro no fetch:", err);
         setDados([]);
       });
-  });
+  }, [loading]);
 
   // pesquisa de fixas no input
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
 
       if (inputs.length >= 3) { // So busca no banco se for digitado 3 ou mais letras
+        
         pesquisa(inputs); // Chama a função pesquisa para pesquisar por fixas com o nome x
       }else if (inputs == "" && result.length > 1) {
-        setDados(result)
+        setLoading(loading + 1)
+        // setDados(result)
       }
     }, 500); // debounce de 500ms para evitar várias requisições
 
@@ -71,7 +73,7 @@ export default function HomeScreen() {
   const pesquisa = async (nome = '') => {
 
     try {
-      const response = await fetch(`http://${ip}:8080/api/fixa/${nome}`);
+      const response = await fetch(`https://fixascaloteiroback.onrender.com/api/fixa/${nome}`);
       const data:Pessoa[] = await response.json();
       if (Array.isArray(data)) {
         setDados(data);
