@@ -11,7 +11,7 @@ export default function MaisInfor({ dado }: { dado: Pessoa | null }) {
     const isDarkMode = theme === 'dark';
 
 
-    // console.log(dado);
+    console.log(dado);
     if (dado) {
         return (
 

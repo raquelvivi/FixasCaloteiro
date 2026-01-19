@@ -31,7 +31,7 @@ export default function TelaComLocalizacaoEGrafico() {
         if (compras == null) {
 
             (async () => {
-                const resposta = await fetch(`http://${ip}:8080/api/compra/${id}`);
+                const resposta = await fetch(`http://${ip}/api/compra/${id}`);
                 const usuario: ComprasComPessoas = await resposta.json();
                 setCompras(usuario);
             })();

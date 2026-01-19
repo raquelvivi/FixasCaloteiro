@@ -32,7 +32,7 @@ async function Pagar(
   id: string
 ) {
   try {
-    const response = await fetch(`http://${ip}:8080/api/compra/grande/${id}`, {
+    const response = await fetch(`http://${ip}/api/compra/grande/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -52,7 +52,7 @@ async function Comprar(list: {}) {
   if (list) {
     if (list.total) {
       try {
-        const response = await fetch(`http://${ip}:8080/api/compra`, {
+        const response = await fetch(`http://${ip}/api/compra`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(list),
