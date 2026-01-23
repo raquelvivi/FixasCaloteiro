@@ -1,10 +1,6 @@
-# Welcome to your Expo app 👋
+# 📑 Fixas Caloteiro
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
+<!-- 1. Install dependencies
 
    ```bash
    npm install
@@ -15,36 +11,63 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npx expo start
    ```
+-->
 
-In the output, you'll find options to open the app in a
+#### O FixasCaloteiro é o front end do projeto, seu back end esta no repositorio: [Fixas Caloteiro Back](https://github.com/raquelvivi/FixasCaloteiroBack). É um aplicativo mobile focado no gerenciamento de fiados de pequenas e médias empresas. A ideia surgiu a partir de uma necessidade real de um mercado onde trabalhei (Kitanda do Vitor). No mercado, tudo era feito de forma muito informal e pouco prática, utilizando sempre um caderno e fichas avulsas para monitorar os fiados e realizar uma gestão básica.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+#### Com o tempo, essa prática se tornou inviável devido à grande quantidade de fichas novas e ao descontrole financeiro geral. Com o aplicativo, tornou-se fácil monitorar o valor total das fichas e das compras, bem como o dinheiro “perdido” e a média de crescimento. Com poucos cliques, é possível modificar fichas, criar novas ou efetuar compras e pagamentos, mantendo sempre o histórico. Dessa forma, um trabalho que antes demorava até dois dias inteiros passou a ser feito em poucas horas, com muito mais dados acessíveis 24 horas por dia.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🛠️ Tecnologias Utilizadas
+<div align="center">
+<table border="0">
+  <tr>
+<td valign="top">
 
-## Get a fresh project
+#### 🎨 Front-end / Mobile
+<a href="https://github.com/search?q=user%3Araquelvivi+language%3AJavaScript"><img src="https://img.shields.io/badge/React%20Native-cc00b1.svg?logo=react&logoColor=white"></a>
+<a href="https://github.com/search?q=user%3Araquelvivi+language%3AJavaScript"><img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-f72585.svg?logo=javascript&logoColor=white"></a>
+<a href="https://github.com/search?q=user%3Araquelvivi+language%3ATypeScript"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-7209b7.svg?logo=typescript&logoColor=white"></a>
+<a href="https://github.com/search?q=user%3Araquelvivi+language%3AExpo"><img alt="Expo" src="https://img.shields.io/badge/Expo-72cb26.svg?logo=expo&logoColor=white"></a>
 
-When you're ready, run:
+</td>
+<td valign="top">
+   
+#### 😶‍🌫️ Outros
 
-```bash
-npm run reset-project
-```
+<img src="https://img.shields.io/badge/Dark%20Mode-212529.svg?logo=darkreader&logoColor=white"> 
+<img src="https://img.shields.io/badge/MVC-c625cc.svg"> 
+<img src="https://img.shields.io/badge/Clean%20Code-822608.svg"> 
+<img src="https://img.shields.io/badge/Validação%20de%20Dados-fffd70.svg"> 
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+<br/>
 
-## Learn more
+</td>
+ </tr>
+</table>
+</div>
 
-To learn more about developing your project with Expo, look at the following resources:
+<br/><br/>
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🖤 Imagens Black
 
-## Join the community
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/a12416cd-6cf2-4f57-af5d-dc24c8b658ef" />
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/571bc625-7a77-4b44-aa68-f1f116b006c1" />
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/ebb407c0-17fe-4ff8-9434-43d908152554" />
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/852ba224-2f05-4883-870a-06f31355a422" />
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 🤍 Imagens White
+
+
+
+
+## 🖼️ Figma
+
+<img width="1077" height="637" alt="image" src="https://github.com/user-attachments/assets/0ec5ea3a-30c9-41e6-8a1a-a3eefda3db06" />
+
+</br></br>
+
+## Futuro
+#### Para o futuro, planejo criar uma página com informações como: quantidade de compras, quantidade de pagamentos, número de fichas, valor total de dinheiro preso, entre outros dados relevantes. Além disso, pretendo incorporar ao aplicativo Fixas Caloteiro um gerenciador de estoque e preços para o mesmo mercado.
+
+#### Para isso, será melhor unificar os dois bancos de dados, pois assim será mais fácil modificar, por exemplo, o preço da banana diretamente pelo celular, fazendo com que o valor seja automaticamente atualizado em todos os computadores do mercado.
