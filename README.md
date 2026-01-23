@@ -1,18 +1,5 @@
 # 📑 Fixas Caloteiro
 
-<!-- 1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
--->
-
 #### O FixasCaloteiro é o front end do projeto, seu back end esta no repositorio: [Fixas Caloteiro Back](https://github.com/raquelvivi/FixasCaloteiroBack). É um aplicativo mobile focado no gerenciamento de fiados de pequenas e médias empresas. A ideia surgiu a partir de uma necessidade real de um mercado onde trabalhei (Kitanda do Vitor). No mercado, tudo era feito de forma muito informal e pouco prática, utilizando sempre um caderno e fichas avulsas para monitorar os fiados e realizar uma gestão básica.
 
 #### Com o tempo, essa prática se tornou inviável devido à grande quantidade de fichas novas e ao descontrole financeiro geral. Com o aplicativo, tornou-se fácil monitorar o valor total das fichas e das compras, bem como o dinheiro “perdido” e a média de crescimento. Com poucos cliques, é possível modificar fichas, criar novas ou efetuar compras e pagamentos, mantendo sempre o histórico. Dessa forma, um trabalho que antes demorava até dois dias inteiros passou a ser feito em poucas horas, com muito mais dados acessíveis 24 horas por dia.
@@ -48,6 +35,21 @@
 
 <br/><br/>
 
+## 🚀 Execultar
+
+1. Install dependencies
+
+   ```bash
+   npm install
+   ```
+
+2. Start the app
+
+   ```bash
+   npx expo start
+   ```
+
+<br/><br/>
 ## 🖤 Imagens Black
 
 <img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/a12416cd-6cf2-4f57-af5d-dc24c8b658ef" />
