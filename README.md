@@ -72,14 +72,17 @@
 <img width="1077" height="637" alt="image" src="https://github.com/user-attachments/assets/0ec5ea3a-30c9-41e6-8a1a-a3eefda3db06" />
 
 </br></br>
-<!--
-## Aprendizagem
-#### A maior aprendizagem que tive nesse projeto foi a clasica ideia "funciona no meu computador"
 
-<img width="658" height="692" alt="image" src="https://github.com/user-attachments/assets/c3bf2a5d-8057-4e81-bad8-d1a4ffc54a95" /> <img width="732" height="806" alt="image" src="https://github.com/user-attachments/assets/9f7b0118-707c-49d9-bb6f-37b539c45cd9" /> <img width="445" height="200" alt="image" src="https://github.com/user-attachments/assets/936dd28c-262b-4a15-b15a-d0d2e6dc1cfe" />
+## Problemas
+#### Neste projeto, enfrentei um desafio baseado no clássico "na minha máquina funciona". O aplicativo operava perfeitamente no computador e no Expo, mas o cenário mudou na transformação para APK. Durante a execução do APK, a tela dinâmica /pg/[id] não carregava corretamente: ao navegar para ela, o aplicativo exibia a mensagem “Carregando...” indefinidamente.
+
+#### O erro não estava relacionado à navegação ou ao parâmetro id, mas sim às requisições HTTP feitas para o backend hospedado na Render. Enquanto no ambiente de teste tudo fluía, no ambiente real a história era outra. O próprio Android bloqueava a requisição HTTP, o que, consequentemente, impedia a resposta e o carregamento da tela. A solução foi rápida: substituir o HTTP por sua versão segura e criptografada, o HTTPS.
+
+#### Com isso, aprendi que ambientes de desenvolvimento são mais permissivos e aceitam HTTP, enquanto em produção as restrições são maiores. Este episódio serve como um lembrete para mim mesma: mesmo tendo estudado protocolos como HTTP, HTTPS, UDP e TCP, acabei caindo na cilada de utilizar uma conexão não segura em um ambiente restrito.
+
 
 </br></br>
--->
+
 
 ## Futuro
 #### Para o futuro, planejo criar uma página com informações como: quantidade de compras, quantidade de pagamentos, número de fichas, valor total de dinheiro preso, entre outros dados relevantes. Além disso, pretendo incorporar ao aplicativo Fixas Caloteiro um gerenciador de estoque e preços para o mesmo mercado.
