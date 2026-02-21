@@ -35,7 +35,7 @@
 
 <br/><br/>
 
-## 🚀 Execultar
+## 🚀 Executar
 
 1. Install dependencies
 
@@ -56,11 +56,15 @@
 <img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/571bc625-7a77-4b44-aa68-f1f116b006c1" />
 <img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/ebb407c0-17fe-4ff8-9434-43d908152554" />
 <img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/852ba224-2f05-4883-870a-06f31355a422" />
-
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/18bdbb0d-3616-4ce2-a6e9-62987118a8c8" />
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/1d8b2369-677c-4bc6-9cfa-33031bda7949" /> 
 
 ## 🤍 Imagens White
-
-
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/cfcb4445-6f9b-4152-8370-791a29a9669c" />
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/1d8e0eed-16ed-4ad0-b9ed-c416f9d37a9d" /> 
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/80936020-854a-4ed6-9c31-7758c92c0d59" />
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/e0842b44-ef54-4acf-93ff-32b7a78976c0" /> 
+<img width="300" height="1043" alt="image" src="https://github.com/user-attachments/assets/072ef379-1172-4f05-bcb8-523af893c275" /> 
 
 
 ## 🖼️ Figma
@@ -68,6 +72,14 @@
 <img width="1077" height="637" alt="image" src="https://github.com/user-attachments/assets/0ec5ea3a-30c9-41e6-8a1a-a3eefda3db06" />
 
 </br></br>
+<!--
+## Aprendizagem
+#### A maior aprendizagem que tive nesse projeto foi a clasica ideia "funciona no meu computador"
+
+<img width="658" height="692" alt="image" src="https://github.com/user-attachments/assets/c3bf2a5d-8057-4e81-bad8-d1a4ffc54a95" /> <img width="732" height="806" alt="image" src="https://github.com/user-attachments/assets/9f7b0118-707c-49d9-bb6f-37b539c45cd9" /> <img width="445" height="200" alt="image" src="https://github.com/user-attachments/assets/936dd28c-262b-4a15-b15a-d0d2e6dc1cfe" />
+
+</br></br>
+-->
 
 ## Futuro
 #### Para o futuro, planejo criar uma página com informações como: quantidade de compras, quantidade de pagamentos, número de fichas, valor total de dinheiro preso, entre outros dados relevantes. Além disso, pretendo incorporar ao aplicativo Fixas Caloteiro um gerenciador de estoque e preços para o mesmo mercado.
