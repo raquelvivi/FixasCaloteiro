@@ -3,7 +3,7 @@ import {
   StyleSheet, View, TextInput, Text, ScrollView, TouchableOpacity,
   useColorScheme, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, Platform
 } from 'react-native';
-
+import AnimatedLoader from 'react-native-animated-loader';
 
 
 import MaisInfor from '../../components/MaisInfor';
@@ -26,14 +26,14 @@ export default function HomeScreen() {
   const [linha, setLinha] = useState<Pessoa|null>(null);
   const [inputs, setInput] = useState("");
   const [result, setResult] = useState<Pessoa[]>([]);
-  const [reset, setReset] = useState(0);
+ const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] = useState(0); // tela de carregamento
+  const [calc, setcalc] = useState(0); 
 
 
   // Pesquisa no banco as Fixas
   useEffect(() => {
-    fetch(`https://fixascaloteiroback.onrender.com/api/fixa`) //${ip}
+    fetch(`${ip}/api/fixa`) //${ip}
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -49,7 +49,10 @@ export default function HomeScreen() {
         console.log("Erro no fetch:", err);
         setDados([]);
       });
-  }, [loading]);
+      setTimeout(() => {
+          setLoading(false);
+        }, 2500);
+  }, [calc]);
 
   // pesquisa de fixas no input
   useEffect(() => {
@@ -59,7 +62,7 @@ export default function HomeScreen() {
         
         pesquisa(inputs); // Chama a função pesquisa para pesquisar por fixas com o nome x
       }else if (inputs == "" && result.length > 1) {
-        setLoading(loading + 1)
+        setcalc(calc + 1)
         // setDados(result)
       }
     }, 500); // debounce de 500ms para evitar várias requisições
@@ -73,7 +76,7 @@ export default function HomeScreen() {
   const pesquisa = async (nome = '') => {
 
     try {
-      const response = await fetch(`https://fixascaloteiroback.onrender.com/api/fixa/${nome}`);
+      const response = await fetch(`${ip}/api/fixa/${nome}`);
       const data:Pessoa[] = await response.json();
       if (Array.isArray(data)) {
         setDados(data);
@@ -88,6 +91,24 @@ export default function HomeScreen() {
       setDados([]);
     }
   };
+
+  if (loading) {
+    return (
+      <View style={styles.outro}>
+        <View style={styles.overlay}>
+          <AnimatedLoader
+            visible={true}
+            overlayColor="rgba(255, 255, 255, 0)"
+            source={require('../../assets/images/Thanksgiving basket.json')}
+            animationStyle={{ width: 300, height: 300, marginTop: -150 }}
+            speed={0.8}
+            loop={false}
+          />
+          
+        </View>
+      </View>
+    );
+  }
 
   
 
@@ -234,6 +255,18 @@ const styles = StyleSheet.create({
 
   texto: {
     margin: 35
+  },
+  overlay: {
+    flex: 1,
+    
+    // backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  outro:{
+
+    position: 'relative',
+    alignItems: 'center',
   }
 
 });

@@ -36,7 +36,7 @@ export default function HomeScreen() {
     if (nome && apelido && logradouro && numero && creditomax && bairro && datapaga) {
 
       try {
-        const resposta = await fetch(`http://${ip}/api/fixa`, {//192.168.18.52
+        const resposta = await fetch(`${ip}/api/fixa`, {//192.168.18.52
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -47,7 +47,14 @@ export default function HomeScreen() {
         setDados(await resposta.json());
 
         if (dados) {
-          console.log("cadastrado com sucesso")
+          alert("cadastrado com sucesso");
+          setNome('');
+          setApelido('');
+          setLogradouro('');
+          setNumero('');
+          setCreditomax('');
+          setBairro('');
+          setDatapaga("");
         }
 
       }

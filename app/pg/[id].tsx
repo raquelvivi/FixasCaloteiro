@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, useColorScheme, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, useColorScheme, TouchableWithoutFeedback, ScrollView, Image } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 
 
+import SelectCompra from '../../components/ComprasRegistradas';
 const screenWidth = Dimensions.get("window").width;
+const screenHeight = Dimensions.get("window").height;
 
 import { Pessoa, Compras, ComprasComPessoas, ip } from '../../types'
 
 import Pagamento from '../../components/Pagamento';
+import { blue } from 'react-native-reanimated/lib/typescript/Colors';
+import AnimatedLoader from 'react-native-animated-loader';
 
 //192.168.18.52 
 
@@ -18,30 +22,44 @@ export default function TelaComLocalizacaoEGrafico() {
     const branco = 'rgba(255, 255, 255, 0.66)'
 
     const { id } = useLocalSearchParams();
+    const pessoaId = Array.isArray(id) ? id[0] : id;
 
     const [view, setView] = useState(1);
     
-    const [compras, setCompras] = useState<ComprasComPessoas | null>(null);
-
-
-
+    const [dadosComprasPuro, setDadosComprasPuro] = useState<Compras[]>([]);
+    const [compras, setCompras] = useState<ComprasComPessoas| null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!id) return; 
 
-        if (compras == null) {
-
-            (async () => {
-                const resposta = await fetch(`http://${ip}/api/compra/${id}`);
+        const carregar = async () => {
+            try {
+                const resposta = await fetch(`${ip}/api/compra/${pessoaId}`);
                 const usuario: ComprasComPessoas = await resposta.json();
-                setCompras(usuario);
-            })();
+                
+                    setCompras(usuario);
+                    // setDadosComprasPuro(usuario.compras);
+                    console.log(dadosComprasPuro);
+                
+                
+            } catch (error) {
+                console.log("Erro ao buscar compras:", error);
+            };
+            setTimeout(() => {
+                setLoading(false);
+        },  2500);
+        };
 
-        }
-    }, []);
+        carregar();
+    }, [id]);
+
+    
 
 
     return (
-        <View >
+        <View style={{ flex: 1 }}>
+            <ScrollView style={styles.comprasAntigas}>
             {compras ? (
                 <>
                     <Text style={[styles.titulo, { color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : "#000000" }]}>{compras.pessoa.nome}</Text>
@@ -70,14 +88,40 @@ export default function TelaComLocalizacaoEGrafico() {
 
 
             {compras && (
-                <Pagamento id={id} tipo={view} dados={compras} ></Pagamento>
+                <Pagamento id={String(pessoaId)} tipo={view} dados={compras} ></Pagamento>
             )}
+
             
+            
+                    {dadosComprasPuro.length == 0 ? (
+                        <View style={[styles.nadaAinda]}>
+                            <Text style={{color: '#fff'}}>
+                                Nada ainda
+                            </Text>
+                            <Image 
+                                source={require('../../assets/images/melancia.webp')}
+                                style={{ width: 150, height: 150 }}
+                            />
+                        </View>
+                    
+                ) : (dadosComprasPuro.map((item:Compras, index) => (
+    
+                    <View key={index}>
+                     <View  style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)', borderColor: isDarkMode ? branco : 'rgba(0, 0, 0, 0.47)'  }]}> 
+    
+                         <SelectCompra dado={item} />
+                        
+    
+                     </View>
+                     </View>
+                ))
+                )}
 
+                
+                
 
-
-
-
+            </ScrollView>
+  
         </View >
     );
 }
@@ -110,6 +154,36 @@ const styles = StyleSheet.create({
         textAlign: "center",
 
     },
+    comprasAntigas: {
+        // backgroundColor: 'blue',
+
+        flex: 1
+
+    },infor: {
+    padding: 10,
+    borderRadius: 20,
+    margin: 10,
+    
+    borderWidth: 2,
+
+  },
+  overlay: {
+    flex: 1,
+    
+    // backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  outro:{
+    zIndex: 6,
+    position: 'relative',
+    alignItems: 'center',
+  },
+  nadaAinda:{
+    width: screenWidth,
+    alignItems: "center",
+    marginTop: 20
+  }
 
 
 

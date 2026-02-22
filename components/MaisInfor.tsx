@@ -38,7 +38,7 @@ export default function MaisInfor({ dado }: { dado: Pessoa | null }) {
                 </View>
                     <Link href={{
                         pathname: '/pg/[id]',
-                        params: { id: dado.id }
+                        params: { id: String(dado.id) }
                     }} style={[styles.button]}>
                         <Text style={styles.buttonText}>Editar</Text>
                     </Link>

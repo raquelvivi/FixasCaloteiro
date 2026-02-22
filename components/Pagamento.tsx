@@ -32,7 +32,7 @@ async function Pagar(
   id: string
 ) {
   try {
-    const response = await fetch(`http://${ip}/api/compra/grande/${id}`, {
+    const response = await fetch(`${ip}/api/compra/grande/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -47,12 +47,11 @@ async function Pagar(
 }
 
 async function Comprar(list: {}) {
-  //c192.168.18.52
 
   if (list) {
     if (list.total) {
       try {
-        const response = await fetch(`http://${ip}/api/compra`, {
+        const response = await fetch(`${ip}/api/compra`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(list),
@@ -108,7 +107,6 @@ export default function Pagamento({
   const dataFormatada = hoje.toISOString().split("T")[0];
 
   let list = {
-    //tente com let depois
     dia: dataFormatada,
     total: comp,
     apagar: comp,
