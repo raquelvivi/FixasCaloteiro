@@ -78,10 +78,9 @@ export default function HomeScreen() {
     try {
       const response = await fetch(`${ip}/api/fixa/${nome}`);
       const data:Pessoa[] = await response.json();
-      if (Array.isArray(data)) {
+      console.log(data.length)
+      if (Array.isArray(data) ) {
         setDados(data);
-      } else if (data) {
-        setDados([data]);
       } else {
         setDados([]);
       }
@@ -171,7 +170,7 @@ export default function HomeScreen() {
           <View style={styles.fixa}>
 
 
-            {dados.length == 0 ? (
+            {(dados.length == undefined || dados.length < 1) ? (
               <Text style={[styles.texto,{ color: isDarkMode ? '#fff' : '#000' }]}>
                 Não tem nenhuma pessoa com esse nome no banco de dados
               </Text>

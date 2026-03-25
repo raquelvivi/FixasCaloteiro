@@ -39,8 +39,8 @@ export default function TelaComLocalizacaoEGrafico() {
                 const usuario: ComprasComPessoas = await resposta.json();
                 
                     setCompras(usuario);
-                    // setDadosComprasPuro(usuario.compras);
-                    console.log(dadosComprasPuro);
+                    setDadosComprasPuro(usuario.compras);
+                    //console.log(dadosComprasPuro);
                 
                 
             } catch (error) {
@@ -53,6 +53,22 @@ export default function TelaComLocalizacaoEGrafico() {
 
         carregar();
     }, [id]);
+
+
+    if (loading) {
+        return (
+          <View style={styles.outro}>
+            <View style={styles.overlay}>
+              <Image 
+                source={require('../../assets/images/melancia.webp')}
+                style={{ width: 150, height: 150 }}
+            />
+              
+            </View>
+          </View>
+        );
+      }
+    
 
     
 
@@ -71,11 +87,11 @@ export default function TelaComLocalizacaoEGrafico() {
                     <View style={[styles.conteine]}>
 
                         <TouchableWithoutFeedback onPress={() => { setView(1)  }}>
-                            <Text style={[styles.nomeB, styles.button, { color: isDarkMode ? branco : "#000000" }]}>Pagar</Text>
+                            <Text style={[styles.nomeB, styles.button, { color: isDarkMode ? 'rgba(0, 0, 0, 0.74)' : "#fbfbfbd1" }]}>Pagar</Text>
                         </TouchableWithoutFeedback>
 
                         <TouchableWithoutFeedback onPress={() => { setView(2) }}>
-                            <Text style={[styles.nomeB, styles.button, { color: isDarkMode ? branco : "#000000" }]}>Comprar</Text>
+                            <Text style={[styles.nomeB, styles.button, { color: isDarkMode ? 'rgba(0, 0, 0, 0.74)'  :  "#fbfbfbd1"}]}>Comprar</Text>
                         </TouchableWithoutFeedback>
 
                     </View>
@@ -90,9 +106,6 @@ export default function TelaComLocalizacaoEGrafico() {
             {compras && (
                 <Pagamento id={String(pessoaId)} tipo={view} dados={compras} ></Pagamento>
             )}
-
-            
-            
                     {dadosComprasPuro.length == 0 ? (
                         <View style={[styles.nadaAinda]}>
                             <Text style={{color: '#fff'}}>
@@ -141,7 +154,7 @@ const styles = StyleSheet.create({
 
     button: {
 
-        backgroundColor: "#747474",
+        backgroundColor: "#939292",
         width: screenWidth - 250,
         padding: 15,
         borderRadius: 10,
@@ -168,8 +181,7 @@ const styles = StyleSheet.create({
 
   },
   overlay: {
-    flex: 1,
-    
+    marginTop: '60%',
     // backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',

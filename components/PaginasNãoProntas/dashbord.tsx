@@ -28,8 +28,8 @@ const data = {
 };
 
 const chartConfig = {
-  //   backgroundGradientFrom: "#15d76c",
-  //   backgroundGradientTo: "#00863cff",
+  backgroundGradientFrom: "#15d76c",
+  backgroundGradientTo: "#00863cff",
   decimalPlaces: 0, //arredonda os numeros na culuna
   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
 };

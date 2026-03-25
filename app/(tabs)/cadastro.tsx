@@ -177,7 +177,7 @@ export default function HomeScreen() {
 
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={Form}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#4bf46784' : '#028618bb'}]} onPress={Form}>
           <Text style={styles.buttonText}>Enviar</Text>
         </TouchableOpacity>
 
@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
   button:{
     marginTop: 20,
     alignContent: "center",
-    backgroundColor: "#4bf46784",
     padding: 5,
     margin: 10
   },

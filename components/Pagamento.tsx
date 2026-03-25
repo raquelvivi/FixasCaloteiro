@@ -118,7 +118,7 @@ export default function Pagamento({
   return (
     <>
       {quem ? (
-        <View style={[styles.pagar]}>
+        <View style={[styles.pagar, { backgroundColor: isDarkMode ? 'rgba(139, 137, 137, 0.68)' : 'rgb(255, 255, 255)'}]}>
           <Text
             style={[styles.tituloC, { color: isDarkMode ? branco : "#000000" }]}
           >
@@ -179,7 +179,7 @@ export default function Pagamento({
                 try {
                   let vivi = await Pagar(paga, dados.compras, total, id);
                   setTotal(total - paga), setPaga(0);
-                  console.log("deu certo? ", vivi);
+                  //console.log("deu certo? ", vivi);
                 } catch (error) {
                   Alert.alert("Erro", "Falha na comunicação com o servidor.");
                 } finally {
@@ -207,11 +207,11 @@ export default function Pagamento({
                 styles.salvar,
                 {
                   color: isDarkMode
-                    ? "rgba(0, 0, 0, 1)"
-                    : "rgba(255, 255, 255, 0.88)",
+                    ? "rgba(170, 164, 164, 0.73)"
+                    : "rgba(255, 255, 255, 0.74)",
                   backgroundColor: isDarkMode
-                    ? "rgba(255, 255, 255, 0.55)"
-                    : "rgba(0,0,0,1)",
+                    ? "rgba(0, 0, 0, 0.8)"
+                    : "rgb(148, 145, 145)",
                 },
                 loading && { backgroundColor: "#555" },
               ]}
@@ -221,7 +221,7 @@ export default function Pagamento({
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={[styles.comprar]}>
+        <View style={[styles.comprar, { backgroundColor: isDarkMode ? 'rgba(139, 137, 137, 0.68)' : 'rgb(255, 255, 255)'}]}>
           <Text
             style={[styles.tituloC, { color: isDarkMode ? branco : "#000000" }]}
           >
@@ -267,11 +267,11 @@ export default function Pagamento({
                 styles.imagem,
                 {
                   color: isDarkMode
-                    ? "rgba(0, 0, 0, 1)"
-                    : "rgba(255, 255, 255, 0.6)",
+                    ? "rgba(170, 164, 164, 0.73)"
+                    : "rgba(255, 255, 255, 0.74)",
                   backgroundColor: isDarkMode
-                    ? "rgba(255, 255, 255, 0.6)"
-                    : "rgba(0, 0, 0, 1)",
+                    ? "rgba(0, 0, 0, 0.8)"
+                    : "rgb(148, 145, 145)",
                 },
               ]}
             >
@@ -282,11 +282,11 @@ export default function Pagamento({
                 styles.total,
                 {
                   color: isDarkMode
-                    ? "rgba(255, 255, 255, 0.6)"
-                    : "rgba(0, 0, 0, 0.6)",
+                    ? "rgba(170, 164, 164, 0.73)"
+                    : "rgba(255, 255, 255, 0.74)",
                   backgroundColor: isDarkMode
-                    ? "rgba(0, 0, 0, 1)"
-                    : "rgba(255, 255, 255, 0.6)",
+                    ? "rgba(0, 0, 0, 0.8)"
+                    : "rgb(148, 145, 145)",
                 },
               ]}
             >
@@ -311,11 +311,11 @@ export default function Pagamento({
                 styles.salvar,
                 {
                   color: isDarkMode
-                    ? "rgba(0, 0, 0, 1)"
-                    : "rgba(255, 255, 255, 0.88)",
+                    ? "rgb(190, 185, 185)"
+                    : "rgba(255, 255, 255, 0.83)",
                   backgroundColor: isDarkMode
-                    ? "rgba(255, 255, 255, 0.55)"
-                    : "rgba(0,0,0,1)",
+                    ? "rgba(27, 27, 27, 0.55)"
+                    : "rgb(148, 145, 145)",
                 },
               ]}
             >
@@ -386,6 +386,10 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     backgroundColor: "#747474",
     borderRadius: 10,
+    borderColor:'rgba(139, 137, 137, 0.68)', 
+    borderStyle: 'solid',
+    borderWidth: 2,
+
   },
   comprar: {
     width: screenWidth - 20,
@@ -395,6 +399,9 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     backgroundColor: "#747474",
     borderRadius: 10,
+    borderColor:'rgba(139, 137, 137, 0.68)', 
+    borderStyle: 'solid',
+    borderWidth: 2,
   },
   tituloC: {
     textAlign: "center",

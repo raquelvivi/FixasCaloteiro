@@ -11,7 +11,7 @@ export default function MaisInfor({ dado }: { dado: Pessoa | null }) {
     const isDarkMode = theme === 'dark';
 
 
-    console.log(dado);
+    //console.log(dado);
     if (dado) {
         return (
 
@@ -39,15 +39,10 @@ export default function MaisInfor({ dado }: { dado: Pessoa | null }) {
                     <Link href={{
                         pathname: '/pg/[id]',
                         params: { id: String(dado.id) }
-                    }} style={[styles.button]}>
+                    }} style={[styles.button, { backgroundColor: isDarkMode ? '#4bf46784' : '#028618bb'}]}>
                         <Text style={styles.buttonText}>Editar</Text>
                     </Link>
-                    {/* <Link href={{
-                        pathname: '/descricao/[id]',
-                        params: { id: dado.id }
-                    }} style={[styles.button]}>
-                        <Text style={styles.buttonText}>Enviar</Text>
-                    </Link> */}
+                    
 
 
 
@@ -69,7 +64,6 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 20,
         alignContent: "center",
-        backgroundColor: "#4bf46784",
         padding: 5,
         margin: 10
     },
