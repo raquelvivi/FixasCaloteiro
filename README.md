@@ -1,6 +1,6 @@
-# 📑 Fixas Caloteiro
+# 📑 Fichas Caloteiro
 
-#### O FixasCaloteiro é o front end do projeto, seu back end esta no repositorio: [Fixas Caloteiro Back](https://github.com/raquelvivi/FixasCaloteiroBack). É um aplicativo mobile focado no gerenciamento de fiados de pequenas e médias empresas. A ideia surgiu a partir de uma necessidade real de um mercado onde trabalhei (Kitanda do Vitor). No mercado, tudo era feito de forma muito informal e pouco prática, utilizando sempre um caderno e fichas avulsas para monitorar os fiados e realizar uma gestão básica.
+#### O Fichas Caloteiro é o front end do projeto, seu back end esta no repositorio: [Fichas Caloteiro Back](https://github.com/raquelvivi/FixasCaloteiroBack). É um aplicativo mobile focado no gerenciamento de fiados de pequenas e médias empresas. A ideia surgiu a partir de uma necessidade real de um mercado onde trabalhei (Kitanda do Vitor). No mercado, tudo era feito de forma muito informal e pouco prática, utilizando sempre um caderno e fichas avulsas para monitorar os fiados e realizar uma gestão básica.
 
 #### Com o tempo, essa prática se tornou inviável devido à grande quantidade de fichas novas e ao descontrole financeiro geral. Com o aplicativo, tornou-se fácil monitorar o valor total das fichas e das compras, bem como o dinheiro “perdido” e a média de crescimento. Com poucos cliques, é possível modificar fichas, criar novas ou efetuar compras e pagamentos, mantendo sempre o histórico. Dessa forma, um trabalho que antes demorava até dois dias inteiros passou a ser feito em poucas horas, com muito mais dados acessíveis 24 horas por dia.
 
