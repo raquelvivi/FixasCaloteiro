@@ -14,6 +14,11 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 const screenWidth = Dimensions.get("window").width;
 
 import { ComprasComPessoas, Compras, ip } from "../types";
+import { Float } from "react-native/Libraries/Types/CodegenTypes";
+
+
+
+
 
 function calculo(d: ComprasComPessoas) {
   let total = 0;
@@ -22,7 +27,7 @@ function calculo(d: ComprasComPessoas) {
     total = total + d.compras[v].apagar;
   }
 
-  return total;
+  return parseFloat(total.toFixed(2));
 }
 
 async function Pagar(
@@ -31,6 +36,9 @@ async function Pagar(
   total: number,
   id: string
 ) {
+  console.log("valor a pagar: ", valor);
+  console.log("total antes do pagamento: ", total);
+  console.log("total final: ", total - valor);
   try {
     const response = await fetch(`${ip}/api/compra/grande/${id}`, {
       method: "PUT",
@@ -50,14 +58,17 @@ async function Comprar(list: {}) {
 
   if (list) {
     if (list.total) {
+      console.log("valor a comprar: ", list.total);
       try {
         const response = await fetch(`${ip}/api/compra`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(list),
         });
-
-        console.log("salvo no servidor com sucesso!");
+        if(response.status >= 200 && response.status < 300){
+          console.log("salvo no servidor com sucesso!");
+        }
+        
       } catch (error) {
         console.error("Erro ao salvar no servidor:", error);
       }
@@ -69,6 +80,8 @@ async function Comprar(list: {}) {
     }
   }
 }
+
+
 
 export default function Pagamento({
   id,
@@ -83,11 +96,13 @@ export default function Pagamento({
   const isDarkMode = theme === "dark";
   const branco = "rgba(255, 255, 255, 0.66)";
 
-  const [comp, setComp] = useState<number>(0);
-  const [paga, setPaga] = useState<number>(0);
+  const [comp, setComp] = useState<number>(0.0);
+  const [paga, setPaga] = useState<Float>(0.0);
 
   const [quem, setQuem] = useState(true);
   const [total, setTotal] = useState<number>(0); // total de divida do cliente
+  const [inputCompra, setInputCompra] = useState<String>('');
+  const [inputPagamento, setInputPagamento] = useState<String>('');
 
   const [loading, setLoading] = useState(false);
 
@@ -111,7 +126,7 @@ export default function Pagamento({
     total: comp,
     apagar: comp,
     tipopag: "Fiado",
-    idfuncio: 12,
+    idfuncio: 1,
     idfixa: id,
   };
 
@@ -135,10 +150,13 @@ export default function Pagamento({
 
             <TextInput // variavel paga controla o input de pagamento
               placeholder="Valor do Pagamento"
-              value={paga.toString()}
-              onChangeText={(text) => setPaga(Number(text) || 0)}
+              value={inputPagamento.toString()}
+              onChangeText={(text) => {
+                setPaga(parseFloat(text) || 0);
+                setInputPagamento(text);
+              }}
               keyboardType="numeric"
-              maxLength={3} //caracteres maximos
+              maxLength={7} //caracteres maximos
               placeholderTextColor={
                 isDarkMode ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)"
               }
@@ -161,14 +179,14 @@ export default function Pagamento({
               {
                 color: isDarkMode
                   ? "rgba(255, 255, 255, 0.6)"
-                  : "rgba(0, 0, 0, 0.6)",
+                  : "rgb(0, 0, 0)",
                 backgroundColor: isDarkMode
                   ? "rgba(0, 0, 0, 1)"
                   : "rgba(255, 255, 255, 0.6)",
               },
             ]}
           >
-            Total: {total - paga}
+            Divida: {(total - paga).toFixed(2)}
           </Text>
 
           <TouchableOpacity
@@ -178,7 +196,7 @@ export default function Pagamento({
               if (paga <= total && paga != null && paga != 0) {
                 try {
                   let vivi = await Pagar(paga, dados.compras, total, id);
-                  setTotal(total - paga), setPaga(0);
+                  setTotal(total - paga), setPaga(0.0), setInputPagamento('');
                   //console.log("deu certo? ", vivi);
                 } catch (error) {
                   Alert.alert("Erro", "Falha na comunicação com o servidor.");
@@ -238,14 +256,13 @@ export default function Pagamento({
 
             <TextInput
               placeholder="Valor da Compra"
-              value={comp.toString()}
+              value={inputCompra.toString()}
               onChangeText={(text) => {
-                // permite ponto e vírgula no meio
-                const valor = text.replace(",", ".");
-                setComp(parseFloat(valor) || 0);
+                setComp(parseFloat(text) || 0);
+                setInputCompra(text);
               }}
               keyboardType="decimal-pad" // <-- aceita ponto e vírgula
-              maxLength={3} //caracteres maximos
+              maxLength={7} //caracteres maximos
               placeholderTextColor={
                 isDarkMode ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)"
               }
@@ -262,7 +279,7 @@ export default function Pagamento({
           </View>
 
           <View style={styles.rowC}>
-            <Text
+            {/* <Text
               style={[
                 styles.imagem,
                 {
@@ -276,28 +293,28 @@ export default function Pagamento({
               ]}
             >
               Tirar Foto{" "}
-            </Text>
+            </Text> */}
             <Text
               style={[
                 styles.total,
                 {
                   color: isDarkMode
                     ? "rgba(170, 164, 164, 0.73)"
-                    : "rgba(255, 255, 255, 0.74)",
+                    : "rgb(255, 255, 255)",
                   backgroundColor: isDarkMode
                     ? "rgba(0, 0, 0, 0.8)"
                     : "rgb(148, 145, 145)",
                 },
               ]}
             >
-              Total: {total + comp}{" "}
+              Divida: {(total + comp).toFixed(2)}
             </Text>
           </View>
 
           <TouchableOpacity
             onPress={() => {
               if (total + comp < dados.pessoa.creditomax) {
-                Comprar(list), setTotal(total + comp), setComp(0);
+                Comprar(list), setTotal(total + comp), setComp(0.0), setInputCompra('');
               } else {
                 Alert.alert(
                   "Compra muito grande",
@@ -355,10 +372,10 @@ const styles = StyleSheet.create({
   },
 
   total: {
-    width: 100,
+    width: '50%',
     padding: 5,
     borderRadius: 5,
-    fontSize: 15,
+    fontSize: 19,
     // marginLeft: 20
   },
   salvar: {

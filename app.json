@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Fixas Caloteiro",
+    "name": "Fixas Abençoadas",
     "slug": "front-end",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,6 +8,13 @@
     "scheme": "frontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/de51edc9-77b1-4170-ba6e-8eb83b6dc790",
+     
+    },
     "ios": {
       "supportsTablet": true
     },

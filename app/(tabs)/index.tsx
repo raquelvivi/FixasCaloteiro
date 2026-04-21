@@ -1,68 +1,86 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  StyleSheet, View, TextInput, Text, ScrollView, TouchableOpacity,
-  useColorScheme, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, Platform
-} from 'react-native';
-import AnimatedLoader from 'react-native-animated-loader';
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  useColorScheme,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+} from "react-native";
+import AnimatedLoader from "react-native-animated-loader";
 
-
-import MaisInfor from '../../components/MaisInfor';
-import SelectPeople from '../../components/SelectPeople';
-import { Pessoa, ip } from '../../types'
+import MaisInfor from "../../components/MaisInfor";
+import SelectPeople from "../../components/SelectPeople";
+import { Pessoa, ip } from "../../types";
 
 export const mudou = 0;
 
-
-
 export default function HomeScreen() {
-
   const theme = useColorScheme();
-  const isDarkMode = theme === 'dark';
+  const isDarkMode = theme === "dark";
 
-  const branco = 'rgba(255, 255, 255, 0.57)'
+  const branco = "rgba(255, 255, 255, 0.57)";
 
   const [mostrarView, setMostrarView] = useState(false);
   const [dados, setDados] = useState<Pessoa[]>([]);
-  const [linha, setLinha] = useState<Pessoa|null>(null);
+  const [linha, setLinha] = useState<Pessoa | null>(null);
   const [inputs, setInput] = useState("");
   const [result, setResult] = useState<Pessoa[]>([]);
- const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [calc, setcalc] = useState(0); 
-
+  const [calc, setcalc] = useState(0);
 
   // Pesquisa no banco as Fixas
   useEffect(() => {
-    fetch(`${ip}/api/fixa`) //${ip}
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setDados(data); //dados e result recebem as fixas
-          setResult(data);
-        } else if (data) {
-          setDados([data]); // transforma objeto único em array
-        } else {
-          setDados([]); // nada encontrado
-        }
-      })
-      .catch((err) => {
+    const buscarFixas = () => {
+      fetch(`${ip}/api/fixa`) //${ip}
+        .then((res) => res.json())
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setDados(data); //dados e result recebem as fixas
+            setResult(data);
+          } else if (data) {
+            setDados([data]); // transforma objeto único em array
+          } else {
+            setDados([]); // nada encontrado
+          }
+          if(dados){
+            setLoading(false);
+          }
+        }).catch((err) => {
         console.log("Erro no fetch:", err);
         setDados([]);
-      });
-      setTimeout(() => {
-          setLoading(false);
-        }, 2500);
-  }, [calc]);
+        });
+      };
+
+      buscarFixas();
+
+      let interval: ReturnType<typeof setInterval> | null = null;
+
+      if (inputs.length < 3) {
+        interval = setInterval(buscarFixas, 100000);
+      }
+
+  return () => {
+    if (interval) clearInterval(interval);
+  };
+
+  }, [calc]); //
 
   // pesquisa de fixas no input
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
+      if (inputs.length >= 3) {
+        // So busca no banco se for digitado 3 ou mais letras
 
-      if (inputs.length >= 3) { // So busca no banco se for digitado 3 ou mais letras
-        
         pesquisa(inputs); // Chama a função pesquisa para pesquisar por fixas com o nome x
-      }else if (inputs == "" && result.length > 1) {
-        setcalc(calc + 1)
+      } else if (inputs == "" && result.length > 1) {
+        setcalc(calc + 1);
         // setDados(result)
       }
     }, 500); // debounce de 500ms para evitar várias requisições
@@ -70,23 +88,19 @@ export default function HomeScreen() {
     return () => clearTimeout(delayDebounce); // limpa o timeout se o texto mudar antes dos 500ms
   }, [inputs]);
 
-
-
   // Pesquisa fixa por nome no banco de dados
-  const pesquisa = async (nome = '') => {
-
+  const pesquisa = async (nome = "") => {
     try {
       const response = await fetch(`${ip}/api/fixa/${nome}`);
-      const data:Pessoa[] = await response.json();
-      console.log(data.length)
-      if (Array.isArray(data) ) {
+      const data: Pessoa[] = await response.json();
+      console.log(data.length);
+      if (Array.isArray(data)) {
         setDados(data);
       } else {
         setDados([]);
       }
-      
     } catch (error) {
-      console.error('Erro na busca:', error);
+      console.error("Erro na busca:", error);
       setDados([]);
     }
   };
@@ -98,24 +112,18 @@ export default function HomeScreen() {
           <AnimatedLoader
             visible={true}
             overlayColor="rgba(255, 255, 255, 0)"
-            source={require('../../assets/images/Thanksgiving basket.json')}
+            source={require("../../assets/images/Thanksgiving basket.json")}
             animationStyle={{ width: 300, height: 300, marginTop: -150 }}
             speed={0.8}
-            loop={false}
+            loop={true}
           />
-          
         </View>
       </View>
     );
   }
 
-  
-
-
   return (
-
-    <View >
-
+    <View>
       <Modal
         visible={mostrarView}
         transparent={true}
@@ -123,15 +131,15 @@ export default function HomeScreen() {
         onRequestClose={() => setMostrarView(false)} // para Android voltar
       >
         <TouchableWithoutFeedback onPress={() => setMostrarView(false)}>
-          <View style={{
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.4)',
-
-
-          }}>
-            <TouchableWithoutFeedback onPress={() => { }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0,0,0,0.4)",
+            }}
+          >
+            <TouchableWithoutFeedback onPress={() => {}}>
               <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                behavior={Platform.OS === "ios" ? "padding" : undefined}
               >
                 <MaisInfor dado={linha} />
               </KeyboardAvoidingView>
@@ -140,86 +148,83 @@ export default function HomeScreen() {
         </TouchableWithoutFeedback>
       </Modal>
 
-
-
-
-
-
-      <ScrollView >
+      <ScrollView>
         <View style={styles.Conteine}>
           <View style={styles.cabecalho}>
-            <Text style={[styles.label, { color: isDarkMode ? '#fff' : '#000' }]}>Nome:</Text>
+            <Text
+              style={[styles.label, { color: isDarkMode ? "#fff" : "#000" }]}
+            >
+              Nome:
+            </Text>
 
             <TextInput
               placeholder="Nome"
               value={inputs}
               onChangeText={setInput}
-              placeholderTextColor={isDarkMode ? branco : 'rgba(0, 0, 0, 0.6)'}
-              style={[styles.input, { borderBottomColor: isDarkMode ? branco : 'rgba(0,0,0,1)', color: isDarkMode ? '#fff' : 'rgba(0, 0, 0, 1)' }]}
-
+              placeholderTextColor={isDarkMode ? branco : "rgba(0, 0, 0, 0.6)"}
+              style={[
+                styles.input,
+                {
+                  borderBottomColor: isDarkMode ? branco : "rgba(0,0,0,1)",
+                  color: isDarkMode ? "#fff" : "rgba(0, 0, 0, 1)",
+                },
+              ]}
             />
-
           </View>
         </View>
-
-
-
 
         <View style={styles.main}>
-
           <View style={styles.fixa}>
-
-
-            {(dados.length == undefined || dados.length < 1) ? (
-              <Text style={[styles.texto,{ color: isDarkMode ? '#fff' : '#000' }]}>
+            {dados.length == undefined || dados.length < 1 ? (
+              <Text
+                style={[styles.texto, { color: isDarkMode ? "#fff" : "#000" }]}
+              >
                 Não tem nenhuma pessoa com esse nome no banco de dados
               </Text>
-            ) : (dados.map((item:Pessoa, index) => (
-
-              <View key={index}>
-                <TouchableOpacity onPress={() => { setMostrarView(true); setLinha(item) }} style={[styles.infor, { backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 1)' : 'rgba(255, 255, 255, 1)', borderColor: isDarkMode ? branco : 'rgba(0, 0, 0, 0.47)'  }]}>
-
-                  <SelectPeople dado={item} />
-
-                </TouchableOpacity>
-              </View>
-            ))
+            ) : (
+              dados.map((item: Pessoa, index) => (
+                <View key={index}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setMostrarView(true);
+                      setLinha(item);
+                    }}
+                    style={[
+                      styles.infor,
+                      {
+                        backgroundColor: isDarkMode
+                          ? "rgba(0, 0, 0, 1)"
+                          : "rgba(255, 255, 255, 1)",
+                        borderColor: isDarkMode
+                          ? branco
+                          : "rgba(0, 0, 0, 0.47)",
+                      },
+                    ]}
+                  >
+                    <SelectPeople dado={item} />
+                  </TouchableOpacity>
+                </View>
+              ))
             )}
-
-
-
-
-
           </View>
-
         </View>
-
-      </ScrollView >
-
-    </View >
-
-
-
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   Conteine: {
-    flex: 1,                      // Ocupa a tela toda
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '15%',
-    marginBottom: '30%',
-    
-
+    flex: 1, // Ocupa a tela toda
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "15%",
+    marginBottom: "30%",
   },
   cabecalho: {
-
-    flexDirection: 'row', // esse e a linha de baixo deicharam o label e input no lugar certo
-    alignItems: 'center',
-    justifyContent: 'space-between',
-
-
+    flexDirection: "row", // esse e a linha de baixo deicharam o label e input no lugar certo
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   label: {
     marginRight: 8,
@@ -228,44 +233,36 @@ const styles = StyleSheet.create({
 
   input: {
     borderBottomWidth: 2,
-    borderStyle: 'dotted',
+    borderStyle: "dotted",
     width: "55%",
-    textAlign: 'center',
+    textAlign: "center",
     height: 50,
     fontSize: 15,
-
-
   },
-  main: {
-
-  },
+  main: {},
   infor: {
     padding: 10,
     borderRadius: 20,
     margin: 10,
-    
-    borderWidth: 2,
 
+    borderWidth: 2,
   },
   fixa: {
-    display: 'flex',
-  
+    display: "flex",
   },
 
   texto: {
-    margin: 35
+    margin: 35,
   },
   overlay: {
     flex: 1,
-    
+
     // backgroundColor: '#ffffff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-  outro:{
-
-    position: 'relative',
-    alignItems: 'center',
-  }
-
+  outro: {
+    position: "relative",
+    alignItems: "center",
+  },
 });

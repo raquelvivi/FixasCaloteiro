@@ -19,10 +19,10 @@ export default function HomeScreen() {
   const [nome, setNome] = useState("");
   const [apelido, setApelido] = useState("");
   const [logradouro, setLogradouro] = useState("");
-  const [numero, setNumero] = useState("");
-  const [creditomax, setCreditomax] = useState("");
+  const [numero, setNumero] = useState('');
+  const [creditomax, setCreditomax] = useState(0);
   const [bairro, setBairro] = useState("");
-  const [datapaga, setDatapaga] = useState("");
+  //const [datapaga, setDatapaga] = useState(1);
 
   const [id, setId] = useState("");
 
@@ -30,10 +30,17 @@ export default function HomeScreen() {
 
   const branco = 'rgba(255, 255, 255, 0.7)'
 
+  const NormalizaText = (value: String) => {
+    // 1. Normaliza e remove acentos
+    const cleanText = value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+    setNome(cleanText);
+  };
+
   const Form = async () => {
 
 
-    if (nome && apelido && logradouro && numero && creditomax && bairro && datapaga) {
+    if (nome && apelido && creditomax ) {
 
       try {
         const resposta = await fetch(`${ip}/api/fixa`, {//192.168.18.52
@@ -41,10 +48,11 @@ export default function HomeScreen() {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ nome, apelido, logradouro, numero, creditomax, bairro, datapaga })
+          body: JSON.stringify({ nome, apelido, logradouro, numero, creditomax, bairro })
         });
 
         setDados(await resposta.json());
+        console.log(resposta)
 
         if (dados) {
           alert("cadastrado com sucesso");
@@ -52,9 +60,9 @@ export default function HomeScreen() {
           setApelido('');
           setLogradouro('');
           setNumero('');
-          setCreditomax('');
+          setCreditomax(0);
           setBairro('');
-          setDatapaga("");
+          console.log(dados);
         }
 
       }
@@ -82,7 +90,7 @@ export default function HomeScreen() {
           <TextInput
             placeholder="Nome"
             value={nome}
-            onChangeText={setNome}
+            onChangeText={NormalizaText}
             placeholderTextColor={isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'}
             style={[styles.input, { borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,1)', color: isDarkMode ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)' }]}
 
@@ -161,7 +169,7 @@ export default function HomeScreen() {
           />
 
         </View>
-        <View style={styles.row}>
+        {/* <View style={styles.row}>
 
           <Text style={[styles.label, { color: isDarkMode ? branco : '#000' }]}>Pagamento:</Text>
 
@@ -175,7 +183,7 @@ export default function HomeScreen() {
 
           />
 
-        </View>
+        </View> */}
 
         <TouchableOpacity style={[styles.button, { backgroundColor: isDarkMode ? '#4bf46784' : '#028618bb'}]} onPress={Form}>
           <Text style={styles.buttonText}>Enviar</Text>
@@ -213,6 +221,8 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    textTransform: 'capitalize',
+
     borderBottomWidth: 1,
     borderStyle: 'solid',
     width: 200,

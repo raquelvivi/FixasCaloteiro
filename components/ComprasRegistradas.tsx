@@ -9,7 +9,12 @@ export default function SelectCompra({ dado }: { dado: Compras } ) {
 
     const theme = useColorScheme();
     const isDarkMode = theme === 'dark';
-    const dataFormatada = new Date(dado.dia).toISOString().split('T')[0];
+    const data = new Date(dado.dia);
+    
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+
+    const dataFormatada = `${dia} / ${mes}`;
 
 
     return (

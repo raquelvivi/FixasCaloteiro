@@ -25,6 +25,14 @@ export default function TabLayout() {
           default: {},
         }),
       }}>
+      
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="chevron.right" color={color} />,
+        }}
+      />
       <Tabs.Screen
         name="index"
         options={{
@@ -35,7 +43,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cadastro"
         options={{
-          title: 'cadastro',
+          title: 'Cadastro',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />

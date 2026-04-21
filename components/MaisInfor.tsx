@@ -28,12 +28,12 @@ export default function MaisInfor({ dado }: { dado: Pessoa | null }) {
                 </View>
 
                 <Row label="Nome" valor={dado.nome} />
-                <View style={[styles.cabecalho, { flex: 0.5, }]}>
+                {/* <View style={[styles.cabecalho, { flex: 0.5, }]}>
                     <Row label="Endereco" valor={dado.logradouro} />
                     <Row label="N°" valor={`${dado.numero}`} />
-                </View>
+                </View> */}
                 <View style={[styles.cabecalho, { flex: 0.5, }]}>
-                    <Row label="Total" valor={String(dado.total)} />
+                    <Row label="Divida" valor={String(dado.total)} />
                     <Row label="Maximo" valor={`${dado.creditomax}`} />
                 </View>
                     <Link href={{
@@ -97,5 +97,6 @@ const styles = StyleSheet.create({
         margin: 5,
 
     },
+   
 
 });

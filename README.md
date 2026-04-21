@@ -49,6 +49,13 @@
    npx expo start
    ```
 
+   <!-- Baixar Atualizações:
+      npx eas update --branch production --platform android --message "melhor usabilidade"
+
+      Gerar apk:
+      eas build --platform android --profile preview
+    -->
+
 <br/><br/>
 ## 🖤 Imagens Black
 

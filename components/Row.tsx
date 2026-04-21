@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     },
     texto: {
         margin: 5,
-        fontSize: 17,
+        fontSize: 19,
+        maxWidth: '70%',
 
     },
 
