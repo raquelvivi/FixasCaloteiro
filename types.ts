@@ -33,7 +33,7 @@ export type ComprasComPessoas = {
   pessoas: Pessoa[]
 }
 
-export const ip = "https://fixascaloteiroback.onrender.com"; //http://192.168.18.52:8080 https://fixascaloteiroback.onrender.com
+export const ip = "http://192.168.18.52:8080"; //http://192.168.18.52:8080 
 
 
 
