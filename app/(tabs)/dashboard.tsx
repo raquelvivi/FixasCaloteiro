@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { LineChart } from "react-native-chart-kit";
 
 import { ip } from "../../types";
 
-
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
-
 
 const data = {
   labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
   datasets: [
     {
-      data: [2, 4, 3, 8, 9, 6],
+      data: [2, 4, 30, 8, 9, 60],
     },
   ],
 };
@@ -20,39 +19,39 @@ const data = {
 ///api/compra/dashboard
 
 const chartConfig = {
-  backgroundGradientFrom: "#15d76c",
-  backgroundGradientTo: "#00863cff",
+  backgroundGradientFrom: "#00000000",
+  backgroundGradientTo: "rgba(0, 0, 0, 0)",
   decimalPlaces: 0, //arredonda os numeros na culuna
-  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  color: (opacity = 1) => `rgba(255, 160, 200, ${opacity})`,
 };
 
 export default function dashbord() {
-
   const [dados, setDados] = useState({});
 
   useEffect(() => {
-   
     fetch(`${ip}/api/compra/dashboard`)
-    .then((res) => res.json())
+      .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
           setDados(data); //dados e result recebem as fixas
-          console.log(data);
         } else if (data) {
-          console.log(data);
           setDados([data]); // transforma objeto único em array
         }
-        });
+      });
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.total}>
-        <Text style={styles.Text}>Total de Fichas: {dados[0]?.total_fixas}</Text>
-        <Text style={styles.Text}>Valor Total das Fichas: {dados[0]?.dividasTotais}</Text>
+        <Text style={styles.Text}>
+          Total de Fichas: {dados[0]?.total_fixas}
+        </Text>
+        <Text style={styles.Text}>
+          Valor Total das Fichas: {dados[0]?.dividasTotais}
+        </Text>
       </View>
       <View style={styles.graficoContainer}>
-        {/* <LineChart
+        <LineChart
           data={data} //conteudo
           width={screenWidth - 20} //tamanho
           height={220} //altura
@@ -61,7 +60,7 @@ export default function dashbord() {
           withInnerLines={false} //tira as linhas pontilhadas
           //withDots={true} // meche nos pontos
           fromZero={true} // os numeros da esquerda começam em zero
-        /> */}
+        />
       </View>
 
       {/* <View style={styles.container}>
@@ -86,21 +85,21 @@ const styles = StyleSheet.create({
     marginTop: 50,
     width: screenWidth - 100,
     height: 70,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-around',
+    marginLeft: "auto",
+    marginRight: "auto",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
   },
-  Text:{
+  Text: {
     fontSize: 20,
-    color: 'black',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    color: "black",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   container: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    marginLeft: "auto",
+    marginRight: "auto",
     width: screenWidth - 20,
   },
   meses: {
